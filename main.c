@@ -3,5 +3,6 @@
 
 
 int main(){
-    printf("ola mundo\n");
+    yyparse();
+    return 0; 
 }
