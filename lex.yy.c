@@ -469,12 +469,13 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "alex.l"
 #line 2 "alex.l"
+#include "y.tab.h"
 #define PONTO '.'
 #define PVIRG ';'
 #define PE '('
 #define PD ')'
 #define VIRG ','
-#line 478 "lex.yy.c"
+#line 479 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -661,9 +662,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 10 "alex.l"
+#line 11 "alex.l"
 
-#line 667 "lex.yy.c"
+#line 668 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -748,56 +749,56 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 11 "alex.l"
+#line 12 "alex.l"
 {return(NOTAS);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 12 "alex.l"
+#line 13 "alex.l"
 {return(PONTO); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 13 "alex.l"
+#line 14 "alex.l"
 {return(PVIRG);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 14 "alex.l"
+#line 15 "alex.l"
 {return(PE);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 15 "alex.l"
+#line 16 "alex.l"
 {return(PD);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 16 "alex.l"
+#line 17 "alex.l"
 {return(VIRG);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 17 "alex.l"
+#line 18 "alex.l"
 {return(pal);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 18 "alex.l"
+#line 19 "alex.l"
 {return(num);}
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 19 "alex.l"
+#line 20 "alex.l"
 { ; } 
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 20 "alex.l"
+#line 21 "alex.l"
 ECHO;
 	YY_BREAK
-#line 801 "lex.yy.c"
+#line 802 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1795,7 +1796,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 20 "alex.l"
+#line 21 "alex.l"
 
 
 

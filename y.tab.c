@@ -17,9 +17,10 @@ static const char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #define YYPURE 0
 
 #line 2 "yacc.y"
-    
+#include<stdio.h>
+#include"y.tab.h"
 
-#line 22 "y.tab.c"
+#line 23 "y.tab.c"
 
 #ifndef YYSTYPE
 typedef int YYSTYPE;
@@ -163,8 +164,7 @@ typedef struct {
 } YYSTACKDATA;
 /* variables for the parser stack */
 static YYSTACKDATA yystack;
-#line 24 "yacc.y"
-#include"lex.yy.c"
+#line 25 "yacc.y"
 
 void yyerror(char *s){
     printf("Erro sintatico: %s\n",s);
@@ -372,15 +372,15 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 10 "yacc.y"
+#line 11 "yacc.y"
 	{printf("Reconhecido mano!\n");}
 break;
 case 2:
-#line 11 "yacc.y"
+#line 12 "yacc.y"
 	{printf("Hey1\n");}
 break;
 case 3:
-#line 12 "yacc.y"
+#line 13 "yacc.y"
 	{printf("Hey2\n");}
 break;
 #line 385 "y.tab.c"

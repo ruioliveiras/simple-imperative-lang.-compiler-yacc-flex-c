@@ -1,0 +1,177 @@
+   0  $accept : Pauta $end
+
+   1  Pauta : Cabeca Corpo '.'
+
+   2  Cabeca : NOTAS
+
+   3  Corpo : Aluno Alunos
+
+   4  Aluno : IdAl '(' Notas ')'
+
+   5  Alunos :
+   6         | ';' Corpo
+
+   7  IdAl : pal
+
+   8  Notas : Nota LstNotas
+
+   9  Nota : num
+
+  10  LstNotas :
+  11           | ',' Notas
+
+state 0
+	$accept : . Pauta $end  (0)
+
+	NOTAS  shift 1
+	.  error
+
+	Pauta  goto 2
+	Cabeca  goto 3
+
+
+state 1
+	Cabeca : NOTAS .  (2)
+
+	.  reduce 2
+
+
+state 2
+	$accept : Pauta . $end  (0)
+
+	$end  accept
+
+
+state 3
+	Pauta : Cabeca . Corpo '.'  (1)
+
+	pal  shift 4
+	.  error
+
+	Corpo  goto 5
+	Aluno  goto 6
+	IdAl  goto 7
+
+
+state 4
+	IdAl : pal .  (7)
+
+	.  reduce 7
+
+
+state 5
+	Pauta : Cabeca Corpo . '.'  (1)
+
+	'.'  shift 8
+	.  error
+
+
+state 6
+	Corpo : Aluno . Alunos  (3)
+	Alunos : .  (5)
+
+	';'  shift 9
+	'.'  reduce 5
+
+	Alunos  goto 10
+
+
+state 7
+	Aluno : IdAl . '(' Notas ')'  (4)
+
+	'('  shift 11
+	.  error
+
+
+state 8
+	Pauta : Cabeca Corpo '.' .  (1)
+
+	.  reduce 1
+
+
+state 9
+	Alunos : ';' . Corpo  (6)
+
+	pal  shift 4
+	.  error
+
+	Corpo  goto 12
+	Aluno  goto 6
+	IdAl  goto 7
+
+
+state 10
+	Corpo : Aluno Alunos .  (3)
+
+	.  reduce 3
+
+
+state 11
+	Aluno : IdAl '(' . Notas ')'  (4)
+
+	num  shift 13
+	.  error
+
+	Notas  goto 14
+	Nota  goto 15
+
+
+state 12
+	Alunos : ';' Corpo .  (6)
+
+	.  reduce 6
+
+
+state 13
+	Nota : num .  (9)
+
+	.  reduce 9
+
+
+state 14
+	Aluno : IdAl '(' Notas . ')'  (4)
+
+	')'  shift 16
+	.  error
+
+
+state 15
+	Notas : Nota . LstNotas  (8)
+	LstNotas : .  (10)
+
+	','  shift 17
+	')'  reduce 10
+
+	LstNotas  goto 18
+
+
+state 16
+	Aluno : IdAl '(' Notas ')' .  (4)
+
+	.  reduce 4
+
+
+state 17
+	LstNotas : ',' . Notas  (11)
+
+	num  shift 13
+	.  error
+
+	Notas  goto 19
+	Nota  goto 15
+
+
+state 18
+	Notas : Nota LstNotas .  (8)
+
+	.  reduce 8
+
+
+state 19
+	LstNotas : ',' Notas .  (11)
+
+	.  reduce 11
+
+
+10 terminals, 10 nonterminals
+12 grammar rules, 20 states

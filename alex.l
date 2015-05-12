@@ -1,4 +1,5 @@
 %{
+#include "y.tab.h"
 #define PONTO '.'
 #define PVIRG ';'
 #define PE '('

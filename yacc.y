@@ -1,5 +1,6 @@
 %{
-    
+#include<stdio.h>
+#include"y.tab.h"
 
 %}
 
@@ -21,7 +22,6 @@ LstNotas:
 
 
 %%
-#include"lex.yy.c"
 
 void yyerror(char *s){
     printf("Erro sintatico: %s\n",s);
