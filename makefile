@@ -23,5 +23,5 @@ lex.yy.c: alex.l
 	flex alex.l
 
 clean: 
-	rm *.o lex.yy.c play
+	rm *.o lex.yy.c y.tab.c y.tab.h y.output play
 
