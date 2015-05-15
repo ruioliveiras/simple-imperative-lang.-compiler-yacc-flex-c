@@ -1,0 +1,19 @@
+int size; size = 10; 
+int arr[size];
+int i, swap;
+
+// inicia array
+for (i = 0; i < size; i++){
+    arr[i] = i;
+}
+
+// vira array ao contrario cuidado com a prioridade (size /2)
+for (i = 0; i < size / 2; i++){
+    swap = arr[i];
+    arr[i] = arr[size-1-i];
+    arr[size-1-i] = swap;
+}
+
+for (i = 0; i < size; i++){
+    printi(arr[i]);
+}
