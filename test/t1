@@ -1,12 +1,15 @@
 // imprime os numeros pares ate 'limite' e imprime calcula o sumatorio em sum
-int i,sum,limite;
+int i;
+int sum;
+int limite;
+    // comentarios
 sum = 0;
 limite = 10;
-i = 0;
+i = 1 + 1;
 // comentarios
-while(i < limite) {
-    // modulo 
-    if (i % 2){
+while(i < limite){
+// modulo 
+    if (i == 0) {
         printi(i);
         sum = sum + 1;
     }

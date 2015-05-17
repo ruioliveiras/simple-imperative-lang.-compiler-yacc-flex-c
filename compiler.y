@@ -3,84 +3,105 @@
 #include "y.tab.h"
 
 void yyerror(char *s);
+extern ccLine;
 // falta a variavel
 // duvida na lista/conjunto de instruções
 // alterações:
-// Declaracao -> juntei ponto e virgula
+// Decla -> juntei ponto e virgula
 // O Lista de Instruções está estranho (tem nested instructions)
 // talvez deviamos distinguir entre as variaveis escalares e vetoriais
 // no conjunto de instruções, é possivel identificar funções logo ao abrir usem duas chavetas
 // juntar &no SCANI ?
 // contar com os \n?
 // rever as Exp
-// pode dar erro quando se faz uma Atribuicao fora de FOR pq falta ;
+// pode dar erro quando se faz uma Atrib fora de FOR pq falta ;
 // e quando se faz uma atribuiçao ao mesmo tempo que uma declaraçao? -> acrescentei produção (resolve tambem problema anterior)
 // é necessario rever todos os sitios onde se deve inserir ou nao ;
 
 %}
 
 
-%token INT WHILE FOR IF ELSE RETURN VOID PRINTI SCANI TRUE FALSE DO
+%token INT WHILE FOR IF ELSE RETURN VOID PRINTI SCANI TRUE FALSE DO END
 %token var nomefuncao num
 
+%left '+' '-'
+%left '*' '/' '%'
 
 %% 
-Programa:					ConjuntoInstrucoes				{printf("P1\n");}
-ConjuntoInstrucoes:			Instrucao						{printf("P2\n");}
-							| '{' ListaInstrucoes '}'		{printf("P3\n");}
-							| Funcao						{printf("P53\n");}
-ListaInstrucoes:			Instrucao						{printf("P4\n");}
-							| Instrucao ListaInstrucoes		{printf("P5\n");}
-Declaracao:					INT VariavelAtr ';'				{printf("P6\n");}
-							| INT Atribuicao ';'			{printf("P51\n");}
-VariavelAtr:				var								{printf("P7\n");}
-							| var '[' Exp ']'				{printf("P8\n");}
-Instrucao:					If								{printf("P9\n");}
-							| While							{printf("P10\n");}
-							| For							{printf("P11\n");}
-							| Atribuicao					{printf("P12\n");}
-							| Printi						{printf("P13\n");}
-							| Scani							{printf("P14\n");}
-							| DoWhile						{printf("P15\n");}
-							| Declaracao					{printf("P52\n");}
-Atribuicao: 				var '=' Exp						{printf("P16\n");}
-							| var '+''+'					{printf("P17\n");}
-							| var '[' Exp ']' '=' Exp								{printf("P18\n");}
-If: 						IF '(' ExpL ')' '{' ConjuntoInstrucoes '}'				{printf("P19\n");}
-							| IF '(' ExpL ')' Instrucao								{printf("P20\n");}
-While:						WHILE '(' ExpL ')' '{' ConjuntoInstrucoes '}'			{printf("P21\n");}
-DoWhile:					DO '{' ConjuntoInstrucoes '}' WHILE '(' ExpL ')'		{printf("P22\n");}
-For:						FOR '(' Atribuicao ';' ExpL ';' Atribuicao ')' '{' ConjuntoInstrucoes '}'		{printf("P23\n");}
-							| FOR '(' ';' ExpL ';' Atribuicao ')' '{' ConjuntoInstrucoes '}'				{printf("P24\n");}
-							| FOR '(' Atribuicao ';' ExpL ';' Atribuicao ')' ';'							{printf("P25\n");}
-							| FOR '(' ';' ExpL ';' Atribuicao ')' ';'										{printf("P26\n");}
-Printi:						PRINTI '(' Exp ')'										{printf("P27\n");}
-Scani:						SCANI '(' VariavelAtr ')'								{printf("P28\n");}
-Funcao:						Tipo nomefuncao '(' ListaArg ')' ConjuntoInstrucoes		{printf("P29\n");}
-Tipo:						VOID					{printf("P30\n");}
-							| INT					{printf("P31\n");}
-ListaArg:					Tipo var				{printf("P32\n");}
-							| ',' ListaArg			{printf("P33\n");}
-Exp:						M Exp2					{printf("P34\n");}
-Exp2: 												{printf("P35\n");}
-							| '+' Exp				{printf("P36\n");}
-							| '-' Exp				{printf("P37\n");}
-M:							P M2					{printf("P38\n");}
-M2: 												{printf("P39\n");}
-							| '*' M					{printf("P40\n");}
-							| '/' M					{printf("P41\n");}
-P:							'(' Exp ')'				{printf("P42\n");}
-							| num					{printf("P43\n");}
-							| var					{printf("P44\n");}
-ExpL:						var CLog Exp			{printf("P45\n");}
-CLog:						'=''='					{printf("P46\n");}
-							| '<''='				{printf("P47\n");}
-							| '>''='				{printf("P48\n");}
-							| '<'					{printf("P49\n");}
-							| '>'					{printf("P50\n");}
-
+Prog: 		ListInstI END					{printf("##& Prog: 		ListInstI END ## P1\n");}
+			;
+ListInstI:	Funcao ListInstI				{printf("##& ListInstI:	Funcao ListInstI ## P2\n");}
+			| Inst ListInstI				{printf("##& 			| Inst ListInstI ## P3\n");}
+			| 
+			;
+ConjInst:	Inst							{printf("##& ConjInst:	Inst ## P4\n");}
+			| '{' ListInst '}'				{printf("##& 			| '{' ListInst '}' ## P5\n");}
+			;
+ListInst:	Inst ListInst					{printf("##& ListInst:	Inst ListInst ## P6\n");}
+			| Inst							{printf("##& 			| Inst ## P7\n");}
+			;
+Inst:		If								{printf("##& Inst:		If ## P8\n");}
+			| While							{printf("##& 			| While ## P9\n");}
+			| For							{printf("##& 			| For ## P10\n");}
+			| Atrib	';'						{printf("##& 			| Atrib	';' ## P11\n");}
+			| Printi';'						{printf("##& 			| Printi';' ## P12\n");}
+			| Scani	';'						{printf("##& 			| Scani	';' ## P13\n");}
+			| DoWhile						{printf("##& 			| DoWhile ## P14\n");}
+			| Decla	';'						{printf("##& 			| Decla	';' ## P15\n");}
+			;
+VarAtr:		var								{printf("##& VarAtr:		var ## P16\n");}
+			| var '[' Exp ']'				{printf("##& 			| var '[' Exp ']' ## P17\n");}
+			;
+Atrib: 		VarAtr '=' Exp					{printf("##& Atrib: 		VarAtr '=' Exp ## P18\n");}
+			| VarAtr '+''+'					{printf("##& 			| VarAtr '+''+' ## P19\n");}
+			;
+Decla:		INT VarAtr 						{printf("##& Decla:		INT VarAtr ## P20\n");}
+			| INT Atrib 					{printf("##& 			| INT Atrib ## P21\n");}
+			;
+Printi:		PRINTI '(' Exp ')'							{printf("##& Printi:		PRINTI '(' Exp ')' ## P22\n");}
+			;
+Scani:		SCANI '(' VarAtr ')'						{printf("##& Scani:		SCANI '(' VarAtr ')' ## P23\n");}
+			;
+If: 		IF TestExpL ConjInst						{printf("##& If: 		IF TestExpL ConjInst ## P24\n");}
+			;
+While:		WHILE TestExpL ConjInst						{printf("##& While:		WHILE TestExpL ConjInst ## P25\n");}
+			;
+DoWhile:	DO ConjInst WHILE TestExpL					{printf("##& DoWhile:	DO ConjInst WHILE TestExpL ## P26\n");}
+			;
+For:		FOR ForHeader ConjInst 						{printf("##& For:		FOR ForHeader ConjInst ## P27\n");}
+			;
+ForHeader:	'(' ForAtrib ';' ExpL ';' ForAtrib ')'		{printf("##& ForHeader:	'(' ForAtrib ';' ExpL ';' ForAtrib ')' ## P28\n");}
+			;
+ForAtrib: 	Atrib										{printf("##& ForAtrib: 	Atrib ## P29\n");}
+			| 											{printf("##& 			| ## P30\n");}
+			;
+Funcao:		Tipo nomefuncao '(' ListaArg ')' ConjInst	{printf("##& Funcao:		Tipo nomefuncao '(' ListaArg ')' ConjInst ## P31\n");}
+			;
+Tipo:		VOID					{printf("##& Tipo:		VOID ## P32\n");}
+			| INT					{printf("##& 			| INT ## P33\n");}
+			;
+ListaArg:	Tipo var				{printf("##& ListaArg:	Tipo var ## P34\n");}
+			| ',' ListaArg			{printf("##& 			| ',' ListaArg ## P35\n");}
+			;
+Exp:		 Exp '+' Exp			{printf("##& 			| Exp '+' Exp ## P38\n");}
+			| Exp '-' Exp			{printf("##& 			| Exp '-' Exp ## P39\n");}
+			| Exp '*' Exp			{printf("##& 			| Exp '*' Exp ## P40\n");}
+			| Exp '/' Exp			{printf("##& 			| Exp '/' Exp ## P41\n");}
+			| Exp '%' Exp   		{printf("##& 			| Exp 'mod' Exp ## P42\n");}
+			| '(' Exp ')'			{printf("##& 			| '(' Exp ')' ## P43\n");}
+			| num					{printf("##& Exp:		num ## P36\n");}
+			| VarAtr					{printf("##& 			| var ## P37\n");}
+TestExpL:	'(' ExpL ')'			{printf("##& TestExpL:	'(' ExpL ')' ## P44\n");}
+			;
+ExpL:		Exp '=''=' Exp			{printf("##& ExpL:		Exp '=''=' Exp ## P45\n");}
+     		| Exp '!''=' Exp		{printf("##&      		| Exp '!''=' Exp ## P46\n");}
+			| Exp '>''=' Exp  		{printf("##& 			| Exp '>''=' Exp ## P47\n");}
+			| Exp '<''=' Exp		{printf("##& 			| Exp '<''=' Exp ## P48\n");}
+			| Exp '<' Exp 			{printf("##& 			| Exp '<' Exp ## P49\n");}
+			| Exp '>' Exp			{printf("##& 			| Exp '>' Exp ## P50\n");}			
+			;
 %%
 
 void yyerror(char *s){
-    printf("Erro sintatico: %s\n",s);
+    printf("Erro sintatico line %d: %s\n",ccLine,s);
 }

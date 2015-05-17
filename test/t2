@@ -1,6 +1,8 @@
-int size; size = 10; 
+int size;
+size = 10; 
 int arr[size];
-int i, swap;
+int i;
+int swap;
 
 // inicia array
 for (i = 0; i < size; i++){
