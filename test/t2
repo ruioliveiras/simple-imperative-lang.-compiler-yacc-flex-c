@@ -16,13 +16,15 @@ size=10;
 //  arr[size-1-i] = swap;
 // }
 
-// for (i = 0; (i < size) && (1 > 5); i++){
-//     printi(arr[i]);
+for (i = 0; i < 5; i++){
+
+    printi(arr[i]);
+}
+
+// if (5>2) {
+// 	if (8>5) {
+// 		printi(7);
+// 	}
+// 	printi(12);
 // }
 
-if (5>2) {
-	printi(7);
-}
-else if (7<6) {
-	printi(6);
-}

@@ -3,11 +3,15 @@
 #include <string.h>
 #include "compiler.h"
 #include "y.tab.h"
+#include "stack.h"
 
 
 void yyerror(char *s);
 extern ccLine;
-int conds[128];
+
+static int total;
+static int actual;
+static Stack s;
 // falta a variavel
 // duvida na lista/conjunto de instruções
 // alterações:
@@ -102,8 +106,8 @@ Printi:		PRINTI '(' Exp ')'							{printf("WRITEI\n");}
 Scani:		SCANI '(' VarAtr ')'						{printf("READ\nATOI\n\n");}
 			;
 
-If: 		IF TestExpL									{printf("JZ fimif\n");}
-			ConjInst									{printf("fimif\n");}
+If: 		IF TestExpL									{total++; push(s,total); printf("JZ endCond%d\n", get(s));}
+			ConjInst									{printf("endCond%d\n", pop(s));}
 			Else
 			;
 
@@ -111,21 +115,21 @@ Else:
 			| ELSE ConjInst
 			;
 
-While:		WHILE 										{printf("ciclo: NOP\n");}
-			TestExpL									{printf("JZ fimciclo\n");}
-			ConjInst									{printf("JUMP ciclo\nfimciclo\n");}
+While:		WHILE 										{total++; push(s,total); printf("Cond%d: NOP\n", get(s));}
+			TestExpL									{printf("JZ endCond%d\n", get(s));}
+			ConjInst									{printf("JUMP Cond%d\nendCond%d\n", get(s), get(s)); pop(s);}
 			;
 
-DoWhile:	DO 											{printf("ciclo: NOP\n");}
-			ConjInst WHILE TestExpL						{printf("JZ fimciclo\nJUMP ciclo\nfimciclo: NOP\n");}
+DoWhile:	DO 											{total++; push(s,total); printf("Cond%d: NOP\n", get(s));}
+			ConjInst WHILE TestExpL						{printf("JZ endCond%d\nJUMP Cond%d\nendCond%d: NOP\n",get(s) ,get(s) ,get(s)); pop(s);}
 			;
 
-For:		FOR ForHeader ConjInst 						{printf("JUMP cicloA\nfimciclo\n");}
+For:		FOR ForHeader ConjInst 						{printf("JUMP Cond%dA\nendCond%d\n", get(s), get(s)); pop(s);}
 			;
 
-ForHeader:	'(' ForAtrib ';'							{printf("ciclo: NOP\n");}
-			TestExpL ';'								{printf("JZ fimciclo\nJUMP cicloB\ncicloA: NOP\n");}
-			ForAtrib ')'								{printf("JUMP ciclo\ncicloB: NOP\n");}
+ForHeader:	'(' ForAtrib ';'							{total++; push(s,total); printf("Cond%d: NOP\n", get(s));}
+			ExpL ';'									{printf("JZ endCond%d\nJUMP Cond%dB\nCond%dA: NOP\n", get(s), get(s), get(s));}
+			ForAtrib ')'								{printf("JUMP Cond%d\nciclo%dB: NOP\n", get(s), get(s));}
 			;
 
 ForAtrib: 	Atrib										
@@ -165,9 +169,7 @@ FunArgs:
 FunArgs2: 	 Exp 
 			| FunArgs2 ',' Exp
 
-TestExpL:	'(' ExpL ')'
-			| TestExpL '&''&' TestExpL
-			| TestExpL '|''|' TestExpL											
+TestExpL:	'(' ExpL ')'										
 			;
 
 ExpL:		  Exp '=''=' Exp							{printf("EQUAL\n");}
@@ -175,11 +177,19 @@ ExpL:		  Exp '=''=' Exp							{printf("EQUAL\n");}
 			| Exp '>''=' Exp  							{printf("SUPEQ\n");}
 			| Exp '<''=' Exp							{printf("INFEQ\n");}
 			| Exp '<' Exp 								{printf("INF\n");}
-			| Exp '>' Exp								{printf("SUP\n");}			
+			| Exp '>' Exp								{printf("SUP\n");}
+			| ExpL '&''&' ExpL
+			| ExpL '|''|' ExpL
 			;
 %%
 
 void yyerror(char *s){
     printf("Erro sintatico line %d: %s\n",ccLine,s);
+}
+
+void init()
+{
+	s = initStack();
+	total = 0;
 }
 
