@@ -14,7 +14,7 @@ int ccLine = 1;
 
 
 %%
-<<EOF>>     {return(END);}
+
 int         {return(INT);}
 while       {return(WHILE);}
 for         {return(FOR);}
@@ -27,28 +27,28 @@ scani       {return(SCANI);}
 true        {return(TRUE);}
 false       {return(FALSE);}
 do          {return(DO);}
-"=" 		{return(IGUAL);}
-"."        	{return(PONTO);}
-";"        	{return(PVIRG);}
-"("        	{return(PE);}
-")"        	{return(PD);}
-"{"         {return('{');}
-"}"         {return('}');}
-"["         {return('[');}
-"]"         {return(']');}
-","        	{return(VIRG);}
-"<"         {return('<');}
-">"         {return('>');}
-"+"         {return('+');}
-"-"         {return('-');}
-"*"         {return('*');}
-"/"         {return('/');}
-"%"         {return('%');}
-[a-zA-Z]+  	{return(var);}
-[0-9]+     	{return(num);}
+\=	 		{return(IGUAL);}
+\.        	{return(PONTO);}
+\;        	{return(PVIRG);}
+\(        	{return(PE);}
+\)        	{return(PD);}
+\{  	    {return('{');}
+\}      	{return('}');}
+\[ 	        {return('[');}
+\]	        {return(']');}
+\,        	{return(VIRG);}
+\<	        {return('<');}
+\>	        {return('>');}
+\+	        {return('+');}
+\-	        {return('-');}
+\*	        {return('*');}
+\/	        {return('/');}
+\%	        {return('%');}
+[a-zA-Z]+  	{yylval.var_name=strdup(yytext); return(var);}
+[0-9]+     	{yylval.value=atoi(yytext); return(num);}
 [\n]        { ccLine++;}
 \/\/.*      { ; }     
-.           { ; } 
+.           { ; }
 %%
 
 int yywrap()
