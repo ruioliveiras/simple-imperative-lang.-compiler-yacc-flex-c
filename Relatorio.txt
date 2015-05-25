@@ -1,32 +1,120 @@
-<Resumo-->
+<Resumo--> (resumir o que se fez no trabalho, os passos mais importantes, )
 
-<Introdução-->
+<Introdução--> (falar do objetivo deste trabalho, da importancia das ferramentas geradoras de compiladores, de qq merda sobre isto ser um compilador com um parser LR, etc etc...)
 
 <Compilador para uma máquina de stack virtual (descrição do problema)-->
 
+	<Arquitetura> (fazer uma imagem da ligação dos ficheiros e falar do que faz cada um)
+	<Linguagem de programação imperativa simples> (falar da linguagem e das alterações que possui relativamente ao C)
+	<Estruturas de dados> (descrever cada estrutura de dados, o porquê de serem necessárias e a sua utilidade)
+		<Stack>
+		<HashMap>
+	<Gramática Independente de Contexto> (descrever as produções da gramática)
+	<Parser> (descrever o parser - deve ser simples, só falar das coisas mais importantes)
+	<Compilador> (descrever a estrutura do compilador e a forma como opera durante a leitura do ficheiro)
+
+
+<Testes Realizados--> (meter 3 ou 4 testes feitos - codigo em anexo - e comentar os resultados)
+
+<Conclusão--> (falar sobre os problemas encontrados em cada componentes e em cada fase do projeto, dizer que foi uma experiencia bari - falar 	sobre construçao da gramática, a implementação das estruturas de dados e a forma como elas ajudaram no trabalho, e falar das decisoes que foram tomadas relativamente ao compilador )
+
+
+
+
+
+
+
+
+<Resumo>
+	
+
+
+
+
+<Introdução>
+	O presente trabalho enquadra-se na unidade curricular de Processamento de Linguangens da Licenciatura em Engenharia Informática da Universidade do Minho. O trabalho pretende aumentar a experiência em engenharia de linguagens, 
+	
+
+
+
+
+<Compilador para uma máquina de stack virtual (descrição do problema)>
+
+
+
+
+
+
 	<Arquitetura>
+
+
+
+
+
+
 	<Linguagem de programação imperativa simples>
+		Previamente ao desenvolvimento do compilador existe a necessidade de definir uma linguagem sobre a qual este atua, com base numa qualquer linguagem imperativa. Neste sentido e por simplicidade e familiaridade, a linguagem de programação C é a selecionada. Esta linguagem foi simplificada por forma a adaptar-se aos requisitos propostos, sofrendo as seguinte modificações na sua estrutura:
+
+		- Apenas permite manusear variáveis do tipo inteiro (escalar ou array).
+		- Suporta apenas as instruções vulgares de controlo de fluxo de execução (condicional e cíclica), tais como if-else, for, while e do-while.
+		- As instruções que controlam inserção e output de valores (tipicamente printf e scanf) estão adaptadas para suportar apenas inteiros, e então estão renomeadas (printi e scani).
+		- As expressões lógicas devem estar rodeadas por parentises para facilitar a sua distinção e ordem quando em conjunto com expressões aritméticas. 
+
+
+		<Programa exemplo (programa exemplo que mostre de forma simples todas as funcionalidades - funçoes, atribuiçoes, ciclos, expressoes logicas e aritmeticas)> 
+
+
+
 	<Estruturas de dados>
+
+
+
+
+
+
+		<Stack>
+
+
+
+
+
+
+		<HashMap>
+
+
+
+
+
+
 	<Gramática Independente de Contexto>
+
+
+
+
+
+
 	<Parser>
-	
-	
+
+
+
+
+
+
+	<Compilador>
+
+
+
+
+
 
 <Testes Realizados-->
 
+
+
+
+
+
 <Conclusão-->
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
