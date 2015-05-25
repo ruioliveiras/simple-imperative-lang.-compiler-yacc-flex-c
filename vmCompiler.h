@@ -26,7 +26,6 @@ int decFun(Type type, char* funName);
 
 int decAddFunArg(Type type, char* name);
 
-
 void endDecFun();
 
 Addr getAddr(char* varName);

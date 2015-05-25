@@ -78,7 +78,7 @@ Inst:		If
 			| Atrib	';'									
 			| Printi';'									
 			| Scani	';'									
-			| RETURN Exp ';'							{pritnf("");}
+			| RETURN Exp ';'							{printf("RETURN\n");}
 			| DoWhile									
 			;
 
@@ -146,7 +146,7 @@ ForAtrib: 	Atrib
 
 Funcao:		'#' Tipo var 						{decFun($2,$3);}
 			'(' ListaArg ')'					{printf("%s:NOP\n",$3);}
-			'{' ListaDecla ListInst '}'							
+			'{' ListaDecla ListInst '}'			{endDecFun();}			
 			;
 
 Tipo:		VOID								{$$ = _VOID;}
@@ -170,14 +170,14 @@ Exp:		 Exp '+' Exp								{printf("ADD\n");}
 			| num										{printf("PUSHI %d\n", $1);}
 			| VarAtr									{Addr a = getAddr($1.var_name); printf("PUSH%c %d\n",a.scope,a.addr); }
 			| VarAtr '[' Exp ']'						{Addr a = getAddr($1.var_name); printf("PUSH%cP\nADD\nPUSHI %d\nLOADN\n",a.scope,a.addr);}
-			| var '(' FunArgs')'						
+			| var '(' FunArgs')'						{printf("CALL %s\n",$1);}
 			;
 FunArgs: 	
 			| FunArgs2
 			;
 
-FunArgs2: 	 Exp 
-			| FunArgs2 ',' Exp
+FunArgs2: 	 Exp 										
+			| FunArgs2 ',' Exp 							
 
 TestExpL:	'(' ExpL ')'										
 			;

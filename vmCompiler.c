@@ -125,6 +125,7 @@ int decVar(char* varName, int size)
         err += (containsVar(funContext, varName) != NULL);
         err += (containsVar(gloContext, varName) != NULL);
     }
+
     if(!err)
 	{
 		EntryVar newVar = (EntryVar) malloc(sizeof(struct sEntryVar));
@@ -150,20 +151,28 @@ int decVar(char* varName, int size)
 
 Addr getAddr(char* varName)
 {
-	EntryVar varEntry;
-	int memAddr = ERRO_VAR_DONT_EXIST;
+    EntryVar varEntry;
+	int memAddr;
     char scope;
 
-	if(varEntry = containsVar(gloContext,varName))
-	{
-		memAddr = varEntry->memAdr;
-	}
-
     if (funContext == NULL) { 
-        scope = 'L';    
+        varEntry = containsVar(gloContext,varName);
+        scope = 'G';    
     } else {
-        scope = 'G';
+        varEntry = containsVar(funContext,varName);
+        if(varEntry == NULL) {
+            varEntry = containsVar(gloContext,varName);
+        }
+        scope = 'L';
     }
+
+	if(varEntry != NULL) {
+		memAddr = varEntry->memAdr;
+	} else {
+        memAddr = ERRO_VAR_DONT_EXIST;
+    }
+
+
     Addr ret = {memAddr,scope};
 
 	return ret;
