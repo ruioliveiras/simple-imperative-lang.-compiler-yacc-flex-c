@@ -9,6 +9,7 @@
 #define ERRO_VAR_DONT_EXIST -2
 #define ERRO_VAR_INVALID_TYPE -3
 
+extern void init();
 
 typedef enum eType{_INTS,_INTA} Type;
 
@@ -75,8 +76,11 @@ int getMemAdd(char* varName)
 	return memAddr;
 }
 
-int main(){
+int main()
+{
+	init();
     initVarMap();
     yyparse();
+
     return 0; 
 }

@@ -1,8 +1,11 @@
-ALL: y.tab.o lex.yy.o main.o hashmap.o
+ALL: y.tab.o lex.yy.o main.o hashmap.o stack.o
 	gcc -o play $^ -ll
 
 main.o: main.c
 	gcc -c main.c
+
+stack.o: stack.c
+	gcc -c stack.c
 
 hashmap.o: hashmap.c
 	gcc -c hashmap.c
