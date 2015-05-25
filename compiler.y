@@ -105,7 +105,8 @@ Printi:		PRINTI '(' Exp ')'							{printf("WRITEI\n");}
 Scani:		SCANI '(' VarAtr ')'						{printf("READ\nATOI\nSTOREG %d\n",getAddr($3.var_name));}
 			;
 
-If: 		IF TestExpL									{total++; push(s,total); printf("JZ endCond%d\n", get(s));}
+If: 		IF 											{total++; push(s,total);}
+			TestExpL									{printf("JZ endCond%d\n", get(s));}
 			ConjInst									{printf("endCond%d\n", pop(s));}
 			Else
 			;
@@ -177,8 +178,9 @@ ExpL:		  Exp '=''=' Exp							{printf("EQUAL\n");}
 			| Exp '<''=' Exp							{printf("INFEQ\n");}
 			| Exp '<' Exp 								{printf("INF\n");}
 			| Exp '>' Exp								{printf("SUP\n");}
-			| ExpL '&''&' ExpL
-			| ExpL '|''|' ExpL
+			| '(' ExpL ')'								{printf("PUSHI 1\nEQUAL\nJZ endCond%d\n", get(s));}
+			'&''&' '(' ExpL ')'							{printf("PUSHI 1\nEQUAL\nJZ endCond%d\n", get(s));}
+			| '(' ExpL ')' '|''|' '(' ExpL ')'			{printf("ADD\nJZ endCond%d\n", get(s));}
 			;
 %%
 
