@@ -1,8 +1,8 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include "stack.h"
 #include "vmCompiler.h"
+#include "stack.h"
 #include "y.tab.h"
 
 
@@ -55,7 +55,8 @@ static Stack s;
 %start Prog
 
 %% 
-Prog:		ListaDecla									{printf("START\n");}
+Prog:		ListaDecla									
+			ListaFun									{printf("START\n");}
 			ListInstI									{printf("STOP\n");}
 			;
 
@@ -77,7 +78,7 @@ Inst:		If
 			| Atrib	';'									
 			| Printi';'									
 			| Scani	';'									
-			| RETURN Exp ';'
+			| RETURN Exp ';'							{pritnf("");}
 			| DoWhile									
 			;
 
@@ -93,8 +94,11 @@ Atrib: 		VarAtr '=' Exp								{Addr a = getAddr($1.var_name);
 			 '[' Exp ']' '=' Exp 						{printf("STOREN\n");}
 			;
 
-ListaDecla: Decla ListaDecla 										
-            | Funcao ListaDecla
+ListaFun:	Funcao ListaFun
+			|
+
+
+ListaDecla: Decla ListaDecla 							
             |
             ;
 
@@ -139,21 +143,21 @@ ForAtrib: 	Atrib
 			| 											
 			;
 
-Funcao:		'#'Tipo var 						{decFun($2.type,$3);}
-			'(' ListaArg ')'					{}
-			ConjInst							{}
+Funcao:		'#' Tipo var 						{decFun($2,$3);}
+			'(' ListaArg ')'					{printf("%s:NOP\n",$3);}
+			'{' ListaDecla ListInst '}'							
 			;
 
 Tipo:		VOID								{$$ = _VOID;}
-			| INT								{$$ = _INT;}
-			;
+			| INT								{$$ = _INTS;}
+			;	
 
 ListaArg: 	
 			| ListaArg2 
 			;
 
-ListaArg2:	Tipo var 							{dec}
-			| ListaArg2  ','  Tipo var 
+ListaArg2:	Tipo var 							{decAddFunArg($1,$2);}
+			| ListaArg2  ','  Tipo var 			{decAddFunArg($3,$4);}
 			;
 
 Exp:		 Exp '+' Exp								{printf("ADD\n");}
