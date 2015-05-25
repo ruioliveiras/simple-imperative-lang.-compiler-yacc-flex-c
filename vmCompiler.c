@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hashmap.h"
-#include "compiler.h"
+#include "vmCompiler.h"
 
 #define OK 0
 #define ERRO_VAR_ALREADY_EXIST -1

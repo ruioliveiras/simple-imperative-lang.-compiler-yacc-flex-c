@@ -1,5 +1,5 @@
-#ifndef __COMPILER_H__
-#define __COMPILER_H__
+#ifndef __VMCOMPILER_H__
+#define __VMCOMPILER_H__
 
 typedef struct sEntryVar *EntryVar;
 

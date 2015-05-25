@@ -1,16 +1,15 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include "compiler.h"
-#include "y.tab.h"
 #include "stack.h"
+#include "vmCompiler.h"
+#include "y.tab.h"
 
 
 void yyerror(char *s);
 extern ccLine;
 
 static int total;
-static int actual;
 static Stack s;
 // falta a variavel
 // duvida na lista/conjunto de instruções
@@ -103,7 +102,7 @@ Decla:		INT var ';' 								{printf("PUSHI 0\n"); decVar($2, 1);}
 Printi:		PRINTI '(' Exp ')'							{printf("WRITEI\n");}
 			;
 
-Scani:		SCANI '(' VarAtr ')'						{printf("READ\nATOI\n\n");}
+Scani:		SCANI '(' VarAtr ')'						{printf("READ\nATOI\nSTOREG %d\n",getAddr($3.var_name));}
 			;
 
 If: 		IF TestExpL									{total++; push(s,total); printf("JZ endCond%d\n", get(s));}

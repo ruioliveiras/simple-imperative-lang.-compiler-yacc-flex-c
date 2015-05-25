@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "y.tab.h"
-#include "compiler.h"
+#include "vmCompiler.h"
 
 /*
 #define OK 0
