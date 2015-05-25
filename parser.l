@@ -44,6 +44,8 @@ do          {return(DO);}
 \*	        {return('*');}
 \/	        {return('/');}
 \%	        {return('%');}
+\|			{return('|');}			
+\&			{return('&');}
 [a-zA-Z]+  	{yylval.var_name=strdup(yytext); return(var);}
 [0-9]+     	{yylval.value=atoi(yytext); return(num);}
 [\n]        { ccLine++;}

@@ -53,7 +53,6 @@ int decVar(char* varName, int size)
 		}
 		newVar->name = strdup(varName);
 		newVar->memAdr = addressCounter;
-		printf("%s -> %d\n", newVar->name, newVar-> memAdr);
 		addressCounter+=size;
 
 		hashmap_put(mVarMap, varName, (any_t) newVar);
@@ -77,15 +76,7 @@ int getMemAdd(char* varName)
 }
 
 int main(){
-    yyparse();
     initVarMap();
-    decVar("a",1);
-    decVar("b",3);
-    decVar("c",1);
-    decVar("a",1);
-    printf("%d\n", getMemAdd("a"));
-    printf("%d\n", getMemAdd("b"));
-    printf("%d\n", getMemAdd("c"));
-    printf("%d\n", getMemAdd("d"));
+    yyparse();
     return 0; 
 }

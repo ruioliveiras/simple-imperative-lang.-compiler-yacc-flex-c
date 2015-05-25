@@ -5,17 +5,24 @@ int swap;
 
 size=10;
 // inicia array
-for (i = 0; i < size; i++){
-    arr[i] = i;
-}
-
+// for (i = 0; i < size; i++){
+//     arr[i] = i;
+// }
+// i = size % 2;
 // vira array ao contrario cuidado com a prioridade (size /2)
-for (i = 0; i < size / 2; i++ ) {
-    swap = arr[i];
-    arr[i] = arr[size-1-i];
-    arr[size-1-i] = swap;
-}
+// for (i = 0; i < size / 2; i++ ) {
+//    swap = arr[i];
+//	  arr[i] = arr[size-1-i];
+//  arr[size-1-i] = swap;
+// }
 
-for (i = 0; i < size; i++){
-    printi(arr[i]);
+// for (i = 0; (i < size) && (1 > 5); i++){
+//     printi(arr[i]);
+// }
+
+if (5>2) {
+	printi(7);
+}
+else if (7<6) {
+	printi(6);
 }
