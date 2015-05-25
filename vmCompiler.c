@@ -10,7 +10,6 @@
 #define ERRO_VAR_INVALID_TYPE -3
 
 
-enum eType{_VOID,_INTS,_INTA};
 
 struct sEntryVar{
     Type type;
@@ -18,14 +17,21 @@ struct sEntryVar{
     int memAdr;
 };
 
+typedef struct sFunArg
+{
+    Type arg;
+    struct sFunArg *next;
+}* FunArgL;
 
 struct sEntryFun{
     Type type;
     char *name;
-    Type *args;
+    FunArgL args;
+    FunArgL argsEnd;
     map_t vars;
     int addrCount;
 };
+
 
 static EntryFun gloContext;
 static EntryFun funContext;
@@ -40,11 +46,13 @@ int initVarMap()
     gloContext->addrCount = 0;
     //undifined
     gloContext->args = NULL;
+    gloContext->argsEnd = NULL;
     gloContext->type = _VOID;
     gloContext->name = NULL;
 	//addressCounter = 0;
 	//mVarMap = hashmap_new();
-	return 0;
+	mFuncMap = hashmap_new();
+    return 0;
 }
 
 
@@ -67,13 +75,14 @@ EntryVar containsVar(EntryFun fun, char* varName)
 	return varEntry;	
 }
 
-int decFun(Type type,char* funName, Type* args){
+int decFun(Type type,char* funName){
     int ret;
     if(!containsFun(funName)) {
         EntryFun newFun = (EntryFun) malloc(sizeof(struct sEntryFun));
         newFun->name = strdup(funName);
         newFun->type = type;
-        newFun->args = args;
+        newFun->args = NULL;
+        newFun->argsEnd = NULL;
         newFun->vars = hashmap_new();
         newFun->addrCount = 0;
 //        printf("(delar)%s -> %d\n", newFun->name, newFun-> memAdr);
@@ -85,6 +94,20 @@ int decFun(Type type,char* funName, Type* args){
     }
     return ret;
 }
+
+int decAddFunArg(Type type, char* name){
+    if(funContext->argsEnd == NULL){
+        funContext->argsEnd = (FunArgL) malloc(sizeof(struct sFunArg));
+        funContext->args = funContext->argsEnd;
+    } else {
+        funContext->argsEnd->next = (FunArgL) malloc(sizeof(struct sFunArg));
+        funContext->argsEnd = funContext->argsEnd->next;
+    }
+    funContext->argsEnd->arg = type;
+    return decVar(name,1);
+}
+
+
 
 void endDecFun(){
     funContext = NULL;
@@ -102,6 +125,7 @@ int decVar(char* varName, int size)
         err += (containsVar(funContext, varName) != NULL);
         err += (containsVar(gloContext, varName) != NULL);
     }
+
     if(!err)
 	{
 		EntryVar newVar = (EntryVar) malloc(sizeof(struct sEntryVar));
@@ -125,23 +149,31 @@ int decVar(char* varName, int size)
 }
 
 
-char getScope(char* varName) {
-    if (funContext == NULL) { 
-        return 'L';    
-    } else {
-        return 'G';
-    }
-}
-
-int getAddr(char* varName)
+Addr getAddr(char* varName)
 {
-	EntryVar varEntry;
-	int memAddr = ERRO_VAR_DONT_EXIST;
+    EntryVar varEntry;
+	int memAddr;
+    char scope;
 
-	if(varEntry = containsVar(gloContext,varName))
-	{
+    if (funContext == NULL) { 
+        varEntry = containsVar(gloContext,varName);
+        scope = 'G';    
+    } else {
+        varEntry = containsVar(funContext,varName);
+        if(varEntry == NULL) {
+            varEntry = containsVar(gloContext,varName);
+        }
+        scope = 'L';
+    }
+
+	if(varEntry != NULL) {
 		memAddr = varEntry->memAdr;
-	}
-    
-	return memAddr;
+	} else {
+        memAddr = ERRO_VAR_DONT_EXIST;
+    }
+
+
+    Addr ret = {memAddr,scope};
+
+	return ret;
 }

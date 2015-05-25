@@ -1,8 +1,8 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include "stack.h"
 #include "vmCompiler.h"
+#include "stack.h"
 #include "y.tab.h"
 
 
@@ -30,12 +30,13 @@ static Stack s;
 %union{
 	char* var_name;
 	int value;
+	Type type;
 	struct sVarAtr
 	{
 		char* var_name;
 		int value;
 		int size;
-	} varAtr;
+	} varAtr;	
 }
 
 %token INT WHILE FOR IF ELSE RETURN VOID PRINTI SCANI TRUE FALSE DO END
@@ -45,7 +46,7 @@ static Stack s;
 %type <value> num
 %type <varAtr> VarAtr
 %type <varAtr> Atrib
-
+%type <type> Tipo
 
 %left '+' '-'
 %left '*' '/' '%'
@@ -54,7 +55,8 @@ static Stack s;
 %start Prog
 
 %% 
-Prog:		ListaDecla									{printf("START\n");}
+Prog:		ListaDecla									
+			ListaFun									{printf("START\n");}
 			ListInstI									{printf("STOP\n");}
 			;
 
@@ -76,22 +78,27 @@ Inst:		If
 			| Atrib	';'									
 			| Printi';'									
 			| Scani	';'									
-			| RETURN Exp ';'
+			| RETURN Exp ';'							{printf("RETURN\n");}
 			| DoWhile									
 			;
 
 VarAtr:		var											{$$.var_name=strdup($1); $$.size=1;}
 			;
 
-Atrib: 		VarAtr '=' Exp								{printf("STOREG %d\n", getAddr($1.var_name));}
-			| VarAtr '+''+'								{printf("PUSHI 1\nPUSHG %d\nADD\nSTOREG %d\n",getAddr($1.var_name),
-																									  getAddr($1.var_name));}
-			| VarAtr 									{printf("PUSHI %d\n", getAddr($1.var_name));}
+Atrib: 		VarAtr '=' Exp								{Addr a = getAddr($1.var_name);
+														printf("STORE%c %d\n",a.scope,a.addr);}
+			| VarAtr '+''+'								{Addr a = getAddr($1.var_name);
+														printf("PUSHI 1\nPUSH%c %d\nADD\nSTORE%c %d\n",a.scope,a.addr,a.scope,a.addr);}
+			| VarAtr 									{Addr a = getAddr($1.var_name); 
+														printf("PUSHI %d\n",a.addr);}
 			 '[' Exp ']' '=' Exp 						{printf("STOREN\n");}
 			;
 
-ListaDecla: Decla ListaDecla 										
-            | Funcao ListaDecla
+ListaFun:	Funcao ListaFun
+			|
+
+
+ListaDecla: Decla ListaDecla 							
             |
             ;
 
@@ -102,7 +109,8 @@ Decla:		INT var ';' 								{printf("PUSHI 0\n"); decVar($2, 1);}
 Printi:		PRINTI '(' Exp ')'							{printf("WRITEI\n");}
 			;
 
-Scani:		SCANI '(' VarAtr ')'						{printf("READ\nATOI\nSTOREG %d\n",getAddr($3.var_name));}
+Scani:		SCANI '(' VarAtr ')'						{Addr a = getAddr($3.var_name);
+														printf("READ\nATOI\nSTORE%c %d\n",a.scope,a.addr);}
 			;
 
 If: 		IF 											{total++; push(s,total);}
@@ -123,7 +131,7 @@ While:		WHILE 										{total++; push(s,total); printf("Cond%d: NOP\n", get(s))
 DoWhile:	DO 											{total++; push(s,total); printf("Cond%d: NOP\n", get(s));}
 			ConjInst WHILE TestExpL						{printf("JZ endCond%d\nJUMP Cond%d\nendCond%d: NOP\n",get(s) ,get(s) ,get(s)); pop(s);}
 			;
-
+	
 For:		FOR ForHeader ConjInst 						{printf("JUMP Cond%dA\nendCond%d\n", get(s), get(s)); pop(s);}
 			;
 
@@ -136,19 +144,21 @@ ForAtrib: 	Atrib
 			| 											
 			;
 
-Funcao:		'#'Tipo var '(' ListaArg ')'  ConjInst		{/*printf("##& Funcao:		Tipo nomefuncao '(' ListaArg ')' ConjInst ## P31\n");*/}
+Funcao:		'#' Tipo var 						{decFun($2,$3);}
+			'(' ListaArg ')'					{printf("%s:NOP\n",$3);}
+			'{' ListaDecla ListInst '}'			{endDecFun();}			
 			;
 
-Tipo:		VOID										
-			| INT										
-			;
+Tipo:		VOID								{$$ = _VOID;}
+			| INT								{$$ = _INTS;}
+			;	
 
 ListaArg: 	
 			| ListaArg2 
 			;
 
-ListaArg2:	Tipo var {printf("hey3\n");} 				
-			| ListaArg2 {printf("hey4\n");} ',' {printf("hey5\n");}  Tipo var {printf("hey6\n");} 
+ListaArg2:	Tipo var 							{decAddFunArg($1,$2);}
+			| ListaArg2  ','  Tipo var 			{decAddFunArg($3,$4);}
 			;
 
 Exp:		 Exp '+' Exp								{printf("ADD\n");}
@@ -158,16 +168,16 @@ Exp:		 Exp '+' Exp								{printf("ADD\n");}
 			| Exp '/' Exp								{printf("DIV\n");}
 			| '(' Exp ')'								
 			| num										{printf("PUSHI %d\n", $1);}
-			| VarAtr									{printf("PUSHG %d\n", getAddr($1.var_name));}
-			| VarAtr '[' Exp ']'						{printf("PUSHGP\nADD\nPUSHI %d\nLOADN\n", getAddr($1.var_name));}
-			| var '(' FunArgs')'
+			| VarAtr									{Addr a = getAddr($1.var_name); printf("PUSH%c %d\n",a.scope,a.addr); }
+			| VarAtr '[' Exp ']'						{Addr a = getAddr($1.var_name); printf("PUSH%cP\nADD\nPUSHI %d\nLOADN\n",a.scope,a.addr);}
+			| var '(' FunArgs')'						{printf("CALL %s\n",$1);}
 			;
 FunArgs: 	
 			| FunArgs2
 			;
 
-FunArgs2: 	 Exp 
-			| FunArgs2 ',' Exp
+FunArgs2: 	 Exp 										
+			| FunArgs2 ',' Exp 							
 
 TestExpL:	'(' ExpL ')'										
 			;

@@ -1,4 +1,5 @@
 %{
+#include "vmCompiler.h"
 #include "y.tab.h"
 #define PONTO '.'
 #define PVIRG ';'

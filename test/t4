@@ -6,4 +6,4 @@ int j;
 }
 i = 0;
 j = 4;
-i = fun(i,j);
+i = fun(i + 1,j);
