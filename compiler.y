@@ -46,6 +46,7 @@ int conds[128];
 
 %left '+' '-'
 %left '*' '/' '%'
+%left  '&'
 
 %start Prog
 
@@ -54,7 +55,7 @@ Prog:		ListaDecla									{printf("START\n");}
 			ListInstI									{printf("STOP\n");}
 			;
 
-ListInstI:	Inst ListInstI							{/*printf("##& 			| Inst ListInstI ## P3\n");*/}
+ListInstI:	Inst ListInstI								{/*printf("##& 			| Inst ListInstI ## P3\n");*/}
 			| 
 			;
 ConjInst:	Inst										{/*printf("##& ConjInst:	Inst ## P4\n");*/}
@@ -112,7 +113,7 @@ ForHeader:	'(' ForAtrib ';'							{printf("ciclo: NOP\n");}
 ForAtrib: 	Atrib										{/*printf("##& ForAtrib: 	Atrib ## P29\n");*/}
 			| 											{/*printf("##& 			| ## P30\n");*/}
 			;
-Funcao:		Tipo nomefuncao '(' ListaArg ')' ConjInst	{/*printf("##& Funcao:		Tipo nomefuncao '(' ListaArg ')' ConjInst ## P31\n");*/}
+Funcao:		Tipo var '(' ListaArg ')' ConjInst	{/*printf("##& Funcao:		Tipo nomefuncao '(' ListaArg ')' ConjInst ## P31\n");*/}
 			;
 Tipo:		VOID										{/*printf("##& Tipo:		VOID ## P32\n");*/}
 			| INT										{/*printf("##& 			| INT ## P33\n");*/}
@@ -131,7 +132,9 @@ Exp:		 Exp '+' Exp								{printf("ADD\n");}
 			| VarAtr '[' Exp ']'						{}
 TestExpL:	'(' ExpL ')'								{}
 			;
-ExpL:		Exp '=''=' Exp								{printf("EQUAL\n");}
+
+ExpL:		ExpL '&''&' ExpL                            {printf("EQUAL\n");}
+			| Exp '=''=' Exp							{printf("EQUAL\n");}
      		| Exp '!''=' Exp							{printf("EQUAL\n");}
 			| Exp '>''=' Exp  							{printf("SUPEQ\n");}
 			| Exp '<''=' Exp							{printf("INFEQ\n");}
