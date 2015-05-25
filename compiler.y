@@ -161,16 +161,18 @@ ListaArg2:	Tipo var 							{decAddFunArg($1,$2);}
 			| ListaArg2  ','  Tipo var 			{decAddFunArg($3,$4);}
 			;
 
-Exp:		 Exp '+' Exp								{printf("ADD\n");}
-			| Exp '-' Exp								{printf("SUB\n");}
-			| Exp '%' Exp   							{printf("MOD\n");}
-			| Exp '*' Exp								{printf("MUL\n");}
-			| Exp '/' Exp								{printf("DIV\n");}
-			| '(' Exp ')'								
-			| num										{printf("PUSHI %d\n", $1);}
-			| VarAtr									{Addr a = getAddr($1.var_name); printf("PUSH%c %d\n",a.scope,a.addr); }
-			| VarAtr '[' Exp ']'						{Addr a = getAddr($1.var_name); printf("PUSH%cP\nADD\nPUSHI %d\nLOADN\n",a.scope,a.addr);}
-			| var '(' FunArgs')'						{printf("CALL %s\n",$1);}
+Exp:		 Exp '+' Exp						{printf("ADD\n");}
+			| Exp '-' Exp						{printf("SUB\n");}
+			| Exp '%' Exp   					{printf("MOD\n");}
+			| Exp '*' Exp						{printf("MUL\n");}
+			| Exp '/' Exp						{printf("DIV\n");}
+			| '(' Exp ')'						
+			| num								{printf("PUSHI %d\n", $1);}
+			| VarAtr							{Addr a = getAddr($1.var_name); 
+												printf("PUSH%c %d\n",a.scope,a.addr); }
+			| VarAtr '[' Exp ']'				{Addr a = getAddr($1.var_name); 
+												printf("PUSH%cP\nADD\nPUSHI %d\nLOADN\n",a.scope,a.addr);}
+			| var '(' FunArgs')'				{printf("CALL %s\n",$1);}
 			;
 FunArgs: 	
 			| FunArgs2

@@ -86,18 +86,18 @@
 
 
 
-	<Gramática Independente de Contexto>
+	<Analalisador sintatico/semantico>
 
 
 
 
 
 
-	<Parser>
-
-
-
-
+	<Analalisador lexico>
+	O Parser construido deteta todos os símbolos terminais da linguagem (palavras reservadas, sinais e variáveis).
+	É de se destacar a deteção de comentários, que são ignorados.
+	De forma a que fosse mais fácil detetar os erros de sintaxe, o parser conta as linhas que já interpretou. Desta forma o analisador sintático quando dá erro diz a linha onde o erro aconteceu.	
+	Para passar valores como o nome de variaveis ou números utiliza-se o yylval.
 
 
 	<Compilador>
