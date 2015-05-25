@@ -12,15 +12,24 @@
 
 typedef enum eType{_INTS,_INTA} Type;
 
-static map_t mVarMap;
-static map_t mFuncMap;
-static int addressCounter;
-
 typedef struct sEntry{
     Type type;
     char *name;
     int memAdr;
 } *Entry;
+
+
+typedef struct sEntryFun{
+    Type type;
+    char *name;
+    Type *args;
+    map_t vars;
+} *EntryFun;
+
+static EntryFun funContext;
+static map_t mVarMap;
+static map_t mFuncMap;
+static int addressCounter;
 
 int initVarMap()
 {
@@ -28,6 +37,16 @@ int initVarMap()
 	mVarMap = hashmap_new();
 	return 0;
 }
+
+EntryFun containsFun(char* varName)
+{
+    EntryFun varEntry; //= (Entry) malloc(sizeof(Entry));
+    
+    if(!(hashmap_get(mFuncMap, varName, (any_t*) &varEntry) == MAP_OK))
+        varEntry = NULL;
+    return varEntry;    
+}
+
 
 Entry containsVar(char* varName)
 {
@@ -37,6 +56,21 @@ Entry containsVar(char* varName)
 		varEntry = NULL;
 	return varEntry;	
 }
+
+int decFun(Type type,char* funName, Type* args){
+    if(!containsFun(funName)) {
+        EntryFun newFun = (EntryFun) malloc(sizeof(struct sEntryFun));
+        newFun->name = strdup(funName);
+        newFun->type = type;
+        newFun->args = args;
+        newFun->vars = hashmap_new();
+//        printf("(delar)%s -> %d\n", newFun->name, newFun-> memAdr);
+        hashmap_put(mFuncMap, funName, (any_t) newFun);
+        return OK;
+    }
+    return ERRO_VAR_ALREADY_EXIST;
+}
+
 
 int decVar(char* varName, int size)
 {

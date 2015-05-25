@@ -113,7 +113,7 @@ ForHeader:	'(' ForAtrib ';'							{printf("ciclo: NOP\n");}
 ForAtrib: 	Atrib										{/*printf("##& ForAtrib: 	Atrib ## P29\n");*/}
 			| 											{/*printf("##& 			| ## P30\n");*/}
 			;
-Funcao:		Tipo var '(' ListaArg ')' ConjInst	{/*printf("##& Funcao:		Tipo nomefuncao '(' ListaArg ')' ConjInst ## P31\n");*/}
+Funcao:		'#'Tipo var '(' ListaArg ')' ConjInst		{/*printf("##& Funcao:		Tipo nomefuncao '(' ListaArg ')' ConjInst ## P31\n");*/}
 			;
 Tipo:		VOID										{/*printf("##& Tipo:		VOID ## P32\n");*/}
 			| INT										{/*printf("##& 			| INT ## P33\n");*/}
@@ -130,6 +130,14 @@ Exp:		 Exp '+' Exp								{printf("ADD\n");}
 			| num										{printf("PUSHI %d\n",$1);}
 			| VarAtr									{printf("PUSHG %s\n",$1.var_name);}
 			| VarAtr '[' Exp ']'						{}
+			| var'('ExpArgs')'							{printf("PUSHA %s\nCALL",$1);}
+			| var'('')'									{printf("PUSHA %s\nCALL",$1);}
+
+			;
+ExpArgs:	Exp 										{}
+			| ExpArg ',' Exp                            {}
+
+
 TestExpL:	'(' ExpL ')'								{}
 			;
 

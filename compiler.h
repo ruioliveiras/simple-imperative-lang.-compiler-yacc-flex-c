@@ -8,6 +8,7 @@
 
 
 typedef enum eType{_INTS,_INTA} Type;
+
 typedef struct sEntry *entry;
 
 
