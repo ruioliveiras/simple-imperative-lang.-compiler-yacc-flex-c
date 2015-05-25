@@ -5,8 +5,13 @@ typedef struct sEntryVar *EntryVar;
 
 typedef struct sEntryFun *EntryFun;
 
-typedef enum eType Type;
+typedef enum eType{_VOID,_INTS,_INTA} Type;
 
+
+typedef struct sAddr{
+    int addr;
+    char scope;
+} Addr;
 
 
 int initVarMap();
@@ -17,12 +22,10 @@ EntryVar containsVar(EntryFun fun, char* varName);
 
 int decVar(char* varName, int size);
 
-int decFun(Type type, char* funName, Type* args);
+int decFun(Type type, char* funName);
 
 void endDecFun();
 
-char getScope(char* varName);
-
-int getAddr(char* varName);
+Addr getAddr(char* varName);
 
 #endif

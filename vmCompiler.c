@@ -125,23 +125,23 @@ int decVar(char* varName, int size)
 }
 
 
-char getScope(char* varName) {
-    if (funContext == NULL) { 
-        return 'L';    
-    } else {
-        return 'G';
-    }
-}
-
-int getAddr(char* varName)
+Addr getAddr(char* varName)
 {
 	EntryVar varEntry;
 	int memAddr = ERRO_VAR_DONT_EXIST;
+    char scope;
 
 	if(varEntry = containsVar(gloContext,varName))
 	{
 		memAddr = varEntry->memAdr;
 	}
-    
-	return memAddr;
+
+    if (funContext == NULL) { 
+        scope = 'L';    
+    } else {
+        scope = 'G';
+    }
+    Addr ret = {memAddr,scope};
+
+	return ret;
 }

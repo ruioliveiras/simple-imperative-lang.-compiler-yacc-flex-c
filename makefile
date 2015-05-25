@@ -25,6 +25,10 @@ lex.yy.o: lex.yy.c
 lex.yy.c: parser.l
 	flex parser.l
 
+
+clean: 
+	rm *.o lex.yy.c y.tab.c y.tab.h y.output play
+
 t1:
 	./play < test/t1
 
@@ -36,6 +40,3 @@ t3:
 
 t4:
 	./play < test/t4
-
-clean: 
-	rm *.o lex.yy.c y.tab.c y.tab.h y.output play
