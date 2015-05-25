@@ -28,5 +28,8 @@ t2:
 t3:
 	./play < test/t3
 
+t4:
+	./play < test/t4
+
 clean: 
 	rm *.o lex.yy.c y.tab.c y.tab.h y.output play
