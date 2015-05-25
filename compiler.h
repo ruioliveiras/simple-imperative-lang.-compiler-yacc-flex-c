@@ -1,7 +1,7 @@
 #ifndef __COMPILER_H__
 #define __COMPILER_H__
 
-typedef struct sEntry *Entry;
+typedef struct sEntryVar *EntryVar;
 
 typedef struct sEntryFun *EntryFun;
 
@@ -13,13 +13,13 @@ int initVarMap();
 
 EntryFun containsFun(char* varName);
 
-Entry containsVar(EntryFun fun, char* varName);
-
-int decFun(Type type,char* funName, Type* args);
-
-void endDecFun();
+EntryVar containsVar(EntryFun fun, char* varName);
 
 int decVar(char* varName, int size);
+
+int decFun(Type type, char* funName, Type* args);
+
+void endDecFun();
 
 char getScope(char* varName);
 

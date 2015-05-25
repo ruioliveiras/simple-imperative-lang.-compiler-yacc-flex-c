@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hashmap.h"
-#include "y.tab.h"
 #include "compiler.h"
 
 #define OK 0
@@ -13,7 +12,7 @@
 
 enum eType{_VOID,_INTS,_INTA};
 
-struct sEntry{
+struct sEntryVar{
     Type type;
     char *name;
     int memAdr;
@@ -59,9 +58,9 @@ EntryFun containsFun(char* varName)
 }
 
 
-Entry containsVar(EntryFun fun, char* varName)
+EntryVar containsVar(EntryFun fun, char* varName)
 {
-	Entry varEntry; //= (Entry) malloc(sizeof(Entry));
+	EntryVar varEntry; //= (Entry) malloc(sizeof(Entry));
 	
 	if(!(hashmap_get(fun->vars, varName, (any_t*) &varEntry) == MAP_OK))
 		varEntry = NULL;
@@ -105,7 +104,7 @@ int decVar(char* varName, int size)
     }
     if(!err)
 	{
-		Entry newVar = (Entry) malloc(sizeof(struct sEntry));
+		EntryVar newVar = (EntryVar) malloc(sizeof(struct sEntryVar));
 		if(size>1)
 		{
 			newVar->type = _INTA;
@@ -136,7 +135,7 @@ char getScope(char* varName) {
 
 int getAddr(char* varName)
 {
-	Entry varEntry;
+	EntryVar varEntry;
 	int memAddr = ERRO_VAR_DONT_EXIST;
 
 	if(varEntry = containsVar(gloContext,varName))
