@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "hashmap.h"
 #include "y.tab.h"
-
+/*
 #define OK 0
 #define ERRO_VAR_ALREADY_EXIST -1
 #define ERRO_VAR_DONT_EXIST -2
@@ -146,6 +145,7 @@ int getAddr(char* varName)
     
 	return memAddr;
 }
+*/
 
 int main()
 {
