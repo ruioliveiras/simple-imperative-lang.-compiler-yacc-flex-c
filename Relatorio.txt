@@ -46,9 +46,10 @@
 
 
 	<Arquitetura>
-
-
-
+		O sistema desenvolvido é constituído por 2 principais modelos:  parser.l, compiler.y, que são respetivamente o analisador léxico e analisador sintático. 
+		O analisador sintático, utiliza o ficheiro vmCompiler.h, este modulo é o responsável pelo tratamento das variaveis e funções existentes.
+		Em vmCompiler.h podem-se fazer acções tais como adicionar uma variavel, e consultar as variáveis existentes.
+		O Sistema também usou duas estruturas de dados: um HashMap e ou Stack, hashmap utilizado para guardar as variaveis e as funções. A stack para na compilação contrular as label's dos ciclos.
 
 
 
