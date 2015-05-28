@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "vmCompiler.h"
 #include "stack.h"
@@ -8,7 +9,7 @@
 
 void yyerror(char *s);
 extern ccLine;
-
+FILE *f;
 static int total;
 static Stack s;
 // falta a variavel
@@ -56,8 +57,8 @@ static Stack s;
 
 %% 
 Prog:		ListaDecla									
-			ListaFun									{printf("START\n");}
-			ListInstI									{printf("STOP\n");}
+			ListaFun									{fprintf(f,"START\n");}
+			ListInstI									{fprintf(f,"STOP\n");}
 			;
 
 ListInstI:	Inst ListInstI								
@@ -78,20 +79,24 @@ Inst:		If
 			| Atrib	';'									
 			| Printi';'									
 			| Scani	';'									
-			| RETURN Exp ';'							{printf("RETURN\n");}
-			| DoWhile									
+			| RETURN Exp ';'							{fprintf(f,"RETURN\n");}
+			| DoWhile
+			| ELSE 										{yyerror("'Else' sem um 'If' anteriormente");}								
 			;
 
-VarAtr:		var											{$$.var_name=strdup($1); $$.size=1;}
+VarAtr:		var											{Addr a = getAddr($1); $$.var_name=strdup($1); $$.size=1;}
 			;
 
 Atrib: 		VarAtr '=' Exp								{Addr a = getAddr($1.var_name);
-														printf("STORE%c %d\n",a.scope,a.addr);}
+														if(a.type == _INTS)
+															fprintf(f,"STORE%c %d\n",a.scope,a.addr);
+														else yyerror("Tipos incompatíveis");															
+														}
 			| VarAtr '+''+'								{Addr a = getAddr($1.var_name);
-														printf("PUSHI 1\nPUSH%c %d\nADD\nSTORE%c %d\n",a.scope,a.addr,a.scope,a.addr);}
+														fprintf(f,"PUSHI 1\nPUSH%c %d\nADD\nSTORE%c %d\n",a.scope,a.addr,a.scope,a.addr);}
 			| VarAtr 									{Addr a = getAddr($1.var_name); 
-														printf("PUSHI %d\n",a.addr);}
-			 '[' Exp ']' '=' Exp 						{printf("STOREN\n");}
+														fprintf(f,"PUSHI %d\n",a.addr);}
+			 '[' Exp ']' '=' Exp 						{fprintf(f,"STOREN\n");}
 			;
 
 ListaFun:	Funcao ListaFun
@@ -102,20 +107,20 @@ ListaDecla: Decla ListaDecla
             |
             ;
 
-Decla:		INT var ';' 								{printf("PUSHI 0\n"); decVar($2, 1);}
-			| INT var '[' num ']' ';'					{printf("PUSHN %d\n",$4); decVar($2, $4);}
+Decla:		INT var ';' 								{decVar($2, 1); fprintf(f,"PUSHI 0\n");}
+			| INT var '[' num ']' ';'					{decVar($2, $4); fprintf(f,"PUSHN %d\n",$4);}
 			;
 
-Printi:		PRINTI '(' Exp ')'							{printf("WRITEI\n");}
+Printi:		PRINTI '(' Exp ')'							{fprintf(f,"WRITEI\n");}
 			;
 
 Scani:		SCANI '(' VarAtr ')'						{Addr a = getAddr($3.var_name);
-														printf("READ\nATOI\nSTORE%c %d\n",a.scope,a.addr);}
+														fprintf(f,"READ\nATOI\nSTORE%c %d\n",a.scope,a.addr);}
 			;
 
 If: 		IF 											{total++; push(s,total);}
-			TestExpL									{printf("JZ endCond%d\n", get(s));}
-			ConjInst									{printf("endCond%d\n", pop(s));}
+			TestExpL									{fprintf(f,"JZ endCond%d\n", get(s));}
+			ConjInst									{fprintf(f,"endCond%d\n", pop(s));}
 			Else
 			;
 
@@ -123,21 +128,21 @@ Else:
 			| ELSE ConjInst
 			;
 
-While:		WHILE 										{total++; push(s,total); printf("Cond%d: NOP\n", get(s));}
-			TestExpL									{printf("JZ endCond%d\n", get(s));}
-			ConjInst									{printf("JUMP Cond%d\nendCond%d\n", get(s), get(s)); pop(s);}
+While:		WHILE 										{total++; push(s,total); fprintf(f,"Cond%d: NOP\n", get(s));}
+			TestExpL									{fprintf(f,"JZ endCond%d\n", get(s));}
+			ConjInst									{fprintf(f,"JUMP Cond%d\nendCond%d\n", get(s), get(s)); pop(s);}
 			;
 
-DoWhile:	DO 											{total++; push(s,total); printf("Cond%d: NOP\n", get(s));}
-			ConjInst WHILE TestExpL						{printf("JZ endCond%d\nJUMP Cond%d\nendCond%d: NOP\n",get(s) ,get(s) ,get(s)); pop(s);}
+DoWhile:	DO 											{total++; push(s,total); fprintf(f,"Cond%d: NOP\n", get(s));}
+			ConjInst WHILE TestExpL						{fprintf(f,"JZ endCond%d\nJUMP Cond%d\nendCond%d: NOP\n",get(s) ,get(s) ,get(s)); pop(s);}
 			;
 	
-For:		FOR ForHeader ConjInst 						{printf("JUMP Cond%dA\nendCond%d\n", get(s), get(s)); pop(s);}
+For:		FOR ForHeader ConjInst 						{fprintf(f,"JUMP Cond%dA\nendCond%d\n", get(s), get(s)); pop(s);}
 			;
 
-ForHeader:	'(' ForAtrib ';'							{total++; push(s,total); printf("Cond%d: NOP\n", get(s));}
-			ExpL ';'									{printf("JZ endCond%d\nJUMP Cond%dB\nCond%dA: NOP\n", get(s), get(s), get(s));}
-			ForAtrib ')'								{printf("JUMP Cond%d\nciclo%dB: NOP\n", get(s), get(s));}
+ForHeader:	'(' ForAtrib ';'							{total++; push(s,total); fprintf(f,"Cond%d: NOP\n", get(s));}
+			ExpL ';'									{fprintf(f,"JZ endCond%d\nJUMP Cond%dB\nCond%dA: NOP\n", get(s), get(s), get(s));}
+			ForAtrib ')'								{fprintf(f,"JUMP Cond%d\nciclo%dB: NOP\n", get(s), get(s));}
 			;
 
 ForAtrib: 	Atrib										
@@ -145,7 +150,7 @@ ForAtrib: 	Atrib
 			;
 
 Funcao:		'#' Tipo var 						{decFun($2,$3);}
-			'(' ListaArg ')'					{printf("%s:NOP\n",$3);}
+			'(' ListaArg ')'					{fprintf(f,"%s:NOP\n",$3);}
 			'{' ListaDecla ListInst '}'			{endDecFun();}			
 			;
 
@@ -161,18 +166,18 @@ ListaArg2:	Tipo var 							{decAddFunArg($1,$2);}
 			| ListaArg2  ','  Tipo var 			{decAddFunArg($3,$4);}
 			;
 
-Exp:		 Exp '+' Exp						{printf("ADD\n");}
-			| Exp '-' Exp						{printf("SUB\n");}
-			| Exp '%' Exp   					{printf("MOD\n");}
-			| Exp '*' Exp						{printf("MUL\n");}
-			| Exp '/' Exp						{printf("DIV\n");}
+Exp:		 Exp '+' Exp						{fprintf(f,"ADD\n");}
+			| Exp '-' Exp						{fprintf(f,"SUB\n");}
+			| Exp '%' Exp   					{fprintf(f,"MOD\n");}
+			| Exp '*' Exp						{fprintf(f,"MUL\n");}
+			| Exp '/' Exp						{fprintf(f,"DIV\n");}
 			| '(' Exp ')'						
-			| num								{printf("PUSHI %d\n", $1);}
+			| num								{fprintf(f,"PUSHI %d\n", $1);}
 			| VarAtr							{Addr a = getAddr($1.var_name); 
-												printf("PUSH%c %d\n",a.scope,a.addr); }
+												fprintf(f,"PUSH%c %d\n",a.scope,a.addr); }
 			| VarAtr '[' Exp ']'				{Addr a = getAddr($1.var_name); 
-												printf("PUSH%cP\nADD\nPUSHI %d\nLOADN\n",a.scope,a.addr);}
-			| var '(' FunArgs')'				{printf("CALL %s\n",$1);}
+												fprintf(f,"PUSH%cP\nADD\nPUSHI %d\nLOADN\n",a.scope,a.addr);}
+			| var '(' FunArgs')'				{fprintf(f,"CALL %s\n",$1);}
 			;
 FunArgs: 	
 			| FunArgs2
@@ -184,25 +189,26 @@ FunArgs2: 	 Exp
 TestExpL:	'(' ExpL ')'										
 			;
 
-ExpL:		  Exp '=''=' Exp							{printf("EQUAL\n");}
-     		| Exp '!''=' Exp							{printf("EQUAL\nPUSHI 0\nEQUAL\n");}
-			| Exp '>''=' Exp  							{printf("SUPEQ\n");}
-			| Exp '<''=' Exp							{printf("INFEQ\n");}
-			| Exp '<' Exp 								{printf("INF\n");}
-			| Exp '>' Exp								{printf("SUP\n");}
-			| '(' ExpL ')'								{printf("PUSHI 1\nEQUAL\nJZ endCond%d\n", get(s));}
-			'&''&' '(' ExpL ')'							{printf("PUSHI 1\nEQUAL\nJZ endCond%d\n", get(s));}
-			| '(' ExpL ')' '|''|' '(' ExpL ')'			{printf("ADD\nJZ endCond%d\n", get(s));}
+ExpL:		  Exp '=''=' Exp							{fprintf(f,"EQUAL\n");}
+     		| Exp '!''=' Exp							{fprintf(f,"EQUAL\nPUSHI 0\nEQUAL\n");}
+			| Exp '>''=' Exp  							{fprintf(f,"SUPEQ\n");}
+			| Exp '<''=' Exp							{fprintf(f,"INFEQ\n");}
+			| Exp '<' Exp 								{fprintf(f,"INF\n");}
+			| Exp '>' Exp								{fprintf(f,"SUP\n");}
+			| '(' ExpL ')'								{fprintf(f,"PUSHI 1\nEQUAL\nJZ endCond%d\n", get(s));}
+			'&''&' '(' ExpL ')'							{fprintf(f,"PUSHI 1\nEQUAL\nJZ endCond%d\n", get(s));}
+			| '(' ExpL ')' '|''|' '(' ExpL ')'			{fprintf(f,"ADD\nJZ endCond%d\n", get(s));}
 			;
 %%
 
 void yyerror(char *s){
-    printf("Erro sintatico line %d: %s\n",ccLine,s);
+    fprintf(f,"ERRO: Syntax LINHA: %d MSG: %s\n",ccLine,s);
+    exit(0);
 }
 
 void init()
 {
 	s = initStack();
 	total = 0;
+	f = fopen("assembly.out", "w");
 }
-

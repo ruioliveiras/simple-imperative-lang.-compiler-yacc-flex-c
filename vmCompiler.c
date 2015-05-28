@@ -9,7 +9,7 @@
 #define ERRO_VAR_DONT_EXIST -2
 #define ERRO_VAR_INVALID_TYPE -3
 
-
+void yyerror(char *s);
 
 struct sEntryVar{
     Type type;
@@ -69,6 +69,8 @@ EntryFun containsFun(char* varName)
 EntryVar containsVar(EntryFun fun, char* varName)
 {
 	EntryVar varEntry; //= (Entry) malloc(sizeof(Entry));
+    if (fun==NULL)
+        fun = gloContext;
 	
 	if(!(hashmap_get(fun->vars, varName, (any_t*) &varEntry) == MAP_OK))
 		varEntry = NULL;
@@ -90,6 +92,7 @@ int decFun(Type type,char* funName){
         funContext = newFun;
         ret = OK;
     } else {
+        yyerror("Variável já declarada anteriormente");
         ret = ERRO_VAR_ALREADY_EXIST;
     }
     return ret;
@@ -145,6 +148,7 @@ int decVar(char* varName, int size)
 
 		return OK;
 	}
+    yyerror("Variável já declarada anteriormente");
 	return ERRO_VAR_ALREADY_EXIST;
 }
 
@@ -154,10 +158,11 @@ Addr getAddr(char* varName)
     EntryVar varEntry;
 	int memAddr;
     char scope;
+    Type type;
 
     if (funContext == NULL) { 
         varEntry = containsVar(gloContext,varName);
-        scope = 'G';    
+        scope = 'G';
     } else {
         varEntry = containsVar(funContext,varName);
         if(varEntry == NULL) {
@@ -168,8 +173,10 @@ Addr getAddr(char* varName)
 
 	if(varEntry != NULL) {
 		memAddr = varEntry->memAdr;
+        type = varEntry->type;
 	} else {
         memAddr = ERRO_VAR_DONT_EXIST;
+        yyerror("Variável não declarada");
     }
 
 

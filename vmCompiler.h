@@ -11,6 +11,7 @@ typedef enum eType{_VOID,_INTS,_INTA} Type;
 typedef struct sAddr{
     int addr;
     char scope;
+    Type type;
 } Addr;
 
 
