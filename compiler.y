@@ -93,7 +93,11 @@ Atrib: 		VarAtr '=' Exp								{Addr a = getAddr($1.var_name);
 														else yyerror("Tipos incompatíveis");															
 														}
 			| VarAtr '+''+'								{Addr a = getAddr($1.var_name);
-														fprintf(f,"PUSHI 1\nPUSH%c %d\nADD\nSTORE%c %d\n",a.scope,a.addr,a.scope,a.addr);}
+														if(a.type == _INTS)
+															fprintf(f,"PUSHI 1\nPUSH%c %d\nADD\nSTORE%c %d\n",
+																	a.scope,a.addr,a.scope,a.addr);
+														else yyerror("Tipos incompatíveis");															
+														}
 			| VarAtr 									{Addr a = getAddr($1.var_name); 
 														fprintf(f,"PUSHI %d\n",a.addr);}
 			 '[' Exp ']' '=' Exp 						{fprintf(f,"STOREN\n");}

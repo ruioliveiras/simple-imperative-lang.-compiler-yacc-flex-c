@@ -101,7 +101,7 @@
 
 
 	<Compilador>
-
+		A cada regra da gramática, associamos acções a serem executadas à medida que estas são reconhecidas. Assim sendo, é feita uma tradução da linguagem desenvolvida para a linguagem \emph{assembly} da VM, à medida que cada instrução ou expressão é identificada. A maioria destas acções implica uma instrução de escrita no ficheiro de output. 
 
 
 
