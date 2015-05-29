@@ -122,12 +122,40 @@ O presente trabalho enquadra-se na unidade curricular de Processamento de Lingua
 
     O Sistema também usou duas estruturas de dados: um HashMap e ou Stack, hashmap utilizado para guardar as variáveis e as funções. A stack para na compilação controlar as label's dos ciclos.
 
+    Na figura \ref{fig:struct}, pode-se ver as estruturas utilizadas em vmCompiler:
+    \begin{itemize}
+      \item Scope - têm uma map com a informação das variáveis, onde a chave é nome da variável e o valor é um EntryVar;
+      \item EntryFun - guarda a informação sobre o tipo de uma função (argumentos de entrada e tipo de retorno);
+      \item EntryVar - guarda o tipo, nome o endereço relativo de uma dada variável;
+    \end{itemize}
+
+    Com as estruturas anteriores em mente, as variáveis criadas em vmCompiler são as representadas na figura \ref{fig:objs}, onde pode-se ver duas variáveis do tipo Scope uma para o contexto global outra para o contexto interior a uma função.
+
+    Existe uma map de EntryFun (mFuncMap) onde a chave é o nome da função.
+    
+    A variável DecFunAux, é um apontador temporário para um função que se esteja a declarar.
+
 \begin{figure}
 \centering
 \includegraphics[width=15cm]{imagens/dependecias.png}
 \caption{Diagrama das pedendencias dos ficheiros}
 \label{fig:dependencias}
 \end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=10cm]{imagens/estruturas.jpg}
+\caption{Diagrama das estruturas usadas em vmCompiler}
+\label{fig:struct}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=10cm]{imagens/objetos.jpg}
+\caption{Diagrama dos objetos existente em vmCompiler}
+\label{fig:objs}
+\end{figure}
+
 
 
 \section{Estruturas de dados}
