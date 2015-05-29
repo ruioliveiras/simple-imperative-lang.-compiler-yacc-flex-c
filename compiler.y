@@ -57,18 +57,14 @@ static Stack s;
 %% 
 Prog:		ListaDecla									
 			ListaFun									{printf("START\n");}
-			ListInstI									{printf("STOP\n");}
-			;
-
-ListInstI:	Inst ListInstI								
-			| 
+			ListInst									{printf("STOP\n");}
 			;
 
 ConjInst:	Inst										
 			| '{' ListInst '}'						
 			;
 
-ListInst:	Inst ListInst								
+ListInst:	ListInst Inst 								
 			| Inst										
 			;
 
@@ -94,11 +90,11 @@ Atrib: 		VarAtr '=' Exp								{Addr a = getAddr($1.var_name);
 			 '[' Exp ']' '=' Exp 						{printf("STOREN\n");}
 			;
 
-ListaFun:	Funcao ListaFun
+ListaFun:	ListaFun Funcao 
 			|
 
 
-ListaDecla: Decla ListaDecla 							
+ListaDecla: ListaDecla Decla  							
             |
             ;
 
@@ -119,8 +115,8 @@ If: 		IF 											{total++; push(s,total);}
 			Else
 			;
 
-Else:
-			| ELSE ConjInst
+Else:		ELSE ConjInst
+			| 
 			;
 
 While:		WHILE 										{total++; push(s,total); printf("Cond%d: NOP\n", get(s));}
