@@ -29,11 +29,15 @@ int decAddFunArg(Type type, char* name);
 
 void decFunArgRefresh();
 
+int decFunRetAddr();
+
 void endDecFun();
 
-int getFunRetAddr();
+int expFun(char * fun);
 
-int getFunNArgs();
+int expFunNextArg(Type type);
+
+int expFunNArgs();
 
 Addr getAddr(char* varName);
 

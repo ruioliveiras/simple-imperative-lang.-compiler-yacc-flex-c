@@ -8,6 +8,8 @@
 #define ERRO_VAR_ALREADY_EXIST -1
 #define ERRO_VAR_DONT_EXIST -2
 #define ERRO_VAR_INVALID_TYPE -3
+#define ERRO_FUN_DONT_EXIST -4
+#define ERRO -5
 
 void yyerror(char *s);
 
@@ -36,6 +38,7 @@ struct sEntryFun{
 
 static EntryFun gloContext;
 static EntryFun funContext;
+static EntryFun inUseFun;
 //static map_t mVarMap;
 static map_t mFuncMap;
 //static int addressCounter;
@@ -126,18 +129,45 @@ void decFunArgRefresh(){
     }
 }
 
+int decFunRetAddr(){
+    return -(funContext->nargs) - 1;
+}
+
 void endDecFun(){
     funContext = NULL;
 }
 
-int getFunRetAddr(){
-    return -(funContext->nargs) - 1;
-}
+int expFun(char * fun){
+    inUseFun = containsFun(fun);
+    inUseFun->argsEnd = inUseFun->args;
 
-int getFunNArgs(char* funName){
-    return funContext->nargs;
+    if(inUseFun == NULL) {
+        yyerror("ERROR Funtion don't exist");
+        return ERRO_FUN_DONT_EXIST;
+    }
 }
+int expFunNextArg(Type type){
+    if(inUseFun->argsEnd == NULL){
+        yyerror("ERROR invalid number of arguments");
+        return ERRO;
+    }
 
+    if(type != inUseFun->argsEnd->v->type){
+        yyerror("ERROR types don't match");
+        return ERRO_FUN_DONT_EXIST;
+    }
+
+
+    inUseFun->argsEnd = inUseFun->argsEnd->next;
+    return OK;
+}
+int expFunNArgs(){
+    if(inUseFun->argsEnd != NULL){
+        yyerror("ERROR invalid number of arguments");
+        return ERRO;
+    }
+    return inUseFun->nargs;
+}
 
 int decVar(char* varName, int size)
 {

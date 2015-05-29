@@ -109,7 +109,7 @@ Inst:       If
             | Atrib ';'                                 
             | Printi';'                                 
             | Scani ';'                                 
-            | RETURN Exp ';'                            {fprintf(f,"STOREL %d\n",getFunRetAddr());fprintf(f,"RETURN\n");}
+            | RETURN Exp ';'                            {fprintf(f,"STOREL %d\n",decFunRetAddr());fprintf(f,"RETURN\n");}
             | ELSE                                      {yyerror("'Else' sem um 'If' anteriormente");}                              
             ;
 
@@ -149,7 +149,7 @@ If:         IF                                          {total++; push(s,total);
             Else
             ;
 
-Else:       ELSE ConjInst | ;
+Else:       | ELSE ConjInst ;
 
 // ####### WHILE ###########
 
@@ -189,12 +189,15 @@ Exp:         Exp '+' Exp                        {fprintf(f,"ADD\n");}
                                                 fprintf(f,"PUSH%c %d\n",a.scope,a.addr); }
             | VarAtr '[' Exp ']'                {Addr a = getAddr($1.var_name); 
                                                 fprintf(f,"PUSH%cP\nADD\nPUSHI %d\nLOADN\n",a.scope,a.addr);}
-            | var                               {fprintf(f,"nPUSHI 0\n");} // to the return
-            '(' FunArgs')'                      {fprintf(f,"CALL %s\n",$1); fprintf(f, "POP DE QUNATOS???\n");}
+            | var                               {expFun($1); fprintf(f,"nPUSHI 0\n");} // to the return
+            '(' FunArgs')'                      {fprintf(f,"CALL %s\n",$1); fprintf(f, "POP %d\n",expFunNArgs());}
             ;
 
+
 FunArgs:    | FunArgs2 ;
-FunArgs2:   Exp | FunArgs2 ',' Exp ;
+FunArgs2:   Exp                         {expFunNextArg(_INTS);}
+            | FunArgs2 ',' Exp          {expFunNextArg(_INTS);}
+            ;
 
 TestExpL:   '(' ExpL ')'                                        
             ;

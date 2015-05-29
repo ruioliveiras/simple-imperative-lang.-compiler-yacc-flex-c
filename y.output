@@ -65,8 +65,8 @@
 
   41  If : IF $$5 TestExpL $$6 ConjInst $$7 Else
 
-  42  Else : ELSE ConjInst
-  43       |
+  42  Else :
+  43       | ELSE ConjInst
 
   44  $$8 :
 
@@ -1537,22 +1537,22 @@ state 130
 	.  error
 
 
-131: shift/reduce conflict (shift 144, reduce 43) on ELSE
+131: shift/reduce conflict (shift 144, reduce 42) on ELSE
 state 131
 	If : IF $$5 TestExpL $$6 ConjInst $$7 . Else  (41)
-	Else : .  (43)
+	Else : .  (42)
 
 	ELSE  shift 144
-	$end  reduce 43
-	WHILE  reduce 43
-	FOR  reduce 43
-	IF  reduce 43
-	RETURN  reduce 43
-	PRINTI  reduce 43
-	SCANI  reduce 43
-	DO  reduce 43
-	var  reduce 43
-	'}'  reduce 43
+	$end  reduce 42
+	WHILE  reduce 42
+	FOR  reduce 42
+	IF  reduce 42
+	RETURN  reduce 42
+	PRINTI  reduce 42
+	SCANI  reduce 42
+	DO  reduce 42
+	var  reduce 42
+	'}'  reduce 42
 
 	Else  goto 145
 
@@ -1693,7 +1693,7 @@ state 143
 
 
 state 144
-	Else : ELSE . ConjInst  (42)
+	Else : ELSE . ConjInst  (43)
 	ConjInst : .  (20)
 
 	'{'  shift 61
@@ -1794,9 +1794,9 @@ state 152
 
 
 state 153
-	Else : ELSE ConjInst .  (42)
+	Else : ELSE ConjInst .  (43)
 
-	.  reduce 42
+	.  reduce 43
 
 
 state 154
