@@ -19,8 +19,6 @@ int initVarMap();
 
 EntryFun containsFun(char* varName);
 
-EntryVar containsVar(EntryFun fun, char* varName);
-
 int decVar(char* varName, int size);
 
 int decFun(Type type, char* funName);

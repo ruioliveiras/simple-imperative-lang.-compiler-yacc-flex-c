@@ -31,30 +31,29 @@ struct sEntryFun{
     FunArgL args;
     FunArgL argsEnd;
     int nargs;
-    map_t vars;
-    int addrCount;
 };
 
+typedef struct sScope{
+    map_t vars;
+    int addrCount;
+}* Scope;
 
-static EntryFun gloContext;
-static EntryFun funContext;
 static EntryFun inUseFun;
+static EntryFun decFunAux;
+static Scope gloContext;
+static Scope funContext;
 
-static map_t gloVars;
-static int gloVarsCount = 0
-static map_t funVars;
-static int funVarsCount = 0
+static map_t mFuncMap;
+
+
+EntryVar containsVar(Scope fun, char* varName);
+
 
 int initVarMap()
 {
-    gloContext = (EntryFun) malloc(sizeof(struct sEntryFun));
+    gloContext = (Scope) malloc(sizeof(struct sScope));
     gloContext->vars = hashmap_new();
     gloContext->addrCount = 0;
-    //undifined
-    gloContext->args = NULL;
-    gloContext->argsEnd = NULL;
-    gloContext->type = _VOID;
-    gloContext->name = NULL;
 	//addressCounter = 0;
 	//mVarMap = hashmap_new();
 	mFuncMap = hashmap_new();
@@ -71,7 +70,7 @@ EntryFun containsFun(char* varName)
     return varEntry;    
 }
 
-EntryVar containsVar(EntryFun fun, char* varName)
+EntryVar containsVar(Scope fun, char* varName)
 {
 	EntryVar varEntry; //= (Entry) malloc(sizeof(Entry));
     if (fun==NULL)
@@ -90,12 +89,14 @@ int decFun(Type type,char* funName){
         newFun->type = type;
         newFun->args = NULL;
         newFun->argsEnd = NULL;
-        newFun->vars = hashmap_new();
-        newFun->addrCount = 0;
         newFun->nargs  = 0;
-//        printf("(delar)%s -> %d\n", newFun->name, newFun-> memAdr);
+        
         hashmap_put(mFuncMap, funName, (any_t) newFun);
-        funContext = newFun;
+        decFunAux = newFun;
+
+        funContext = (Scope) malloc(sizeof(struct sScope));
+        funContext->vars = hashmap_new();
+        funContext->addrCount = 0;
         ret = OK;
     } else {
         yyerror("Variável já declarada anteriormente");
@@ -105,36 +106,37 @@ int decFun(Type type,char* funName){
 }
 
 int decAddFunArg(Type type, char* name){
-    if(funContext->argsEnd == NULL){
-        funContext->argsEnd = (FunArgL) malloc(sizeof(struct sFunArg));
-        funContext->args = funContext->argsEnd;
+    if(decFunAux->argsEnd == NULL){
+        decFunAux->argsEnd = (FunArgL) malloc(sizeof(struct sFunArg));
+        decFunAux->args = decFunAux->argsEnd;
     } else {
-        funContext->argsEnd->next = (FunArgL) malloc(sizeof(struct sFunArg));
-        funContext->argsEnd = funContext->argsEnd->next;
+        decFunAux->argsEnd->next = (FunArgL) malloc(sizeof(struct sFunArg));
+        decFunAux->argsEnd = decFunAux->argsEnd->next;
     }
-    funContext->argsEnd->next = NULL;
+    decFunAux->argsEnd->next = NULL;
     //funContext->argsEnd->v
     int err = decVar(name,1);
     if (err == OK){
-        (funContext->nargs)++;
-        hashmap_get(funContext->vars, name, (any_t*) &(funContext->argsEnd->v));
+        (decFunAux->nargs)++;
+        hashmap_get(funContext->vars, name, (any_t*) &(decFunAux->argsEnd->v));
     }
     return err;
 }
 
 void decFunArgRefresh(){
-    FunArgL i = funContext->args;
+    FunArgL i = decFunAux->args;
     while(i != NULL){
-        i->v->memAdr -= funContext->nargs;
+        i->v->memAdr -= decFunAux->nargs;
         i = i->next;
     }
 }
 
 int decFunRetAddr(){
-    return -(funContext->nargs) - 1;
+    return -(decFunAux->nargs) - 1;
 }
 
 void endDecFun(){
+    decFunAux = NULL;
     funContext = NULL;
 }
 
@@ -172,7 +174,7 @@ int expFunNArgs(){
 
 int decVar(char* varName, int size)
 {
-    EntryFun context; 
+    Scope context; 
     int err = 0;
     if (funContext == NULL) { 
         context = gloContext;
