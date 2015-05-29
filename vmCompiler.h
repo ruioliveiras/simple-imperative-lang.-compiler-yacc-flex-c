@@ -11,6 +11,7 @@ typedef enum eType{_VOID,_INTS,_INTA} Type;
 typedef struct sAddr{
     int addr;
     char scope;
+    Type type;
 } Addr;
 
 
@@ -26,7 +27,13 @@ int decFun(Type type, char* funName);
 
 int decAddFunArg(Type type, char* name);
 
+void decFunArgRefresh();
+
 void endDecFun();
+
+int getFunRetAddr();
+
+int getFunNArgs();
 
 Addr getAddr(char* varName);
 
