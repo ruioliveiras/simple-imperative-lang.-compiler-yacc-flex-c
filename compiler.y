@@ -12,19 +12,6 @@ extern ccLine;
 FILE *f;
 static int total;
 static Stack s;
-// falta a variavel
-// duvida na lista/conjunto de instruções
-// alterações:
-// Decla -> juntei ponto e virgula
-// O Lista de Instruções está estranho (tem nested instructions)
-// talvez deviamos distinguir entre as variaveis escalares e vetoriais
-// no conjunto de instruções, é possivel identificar funções logo ao abrir usem duas chavetas
-// juntar &no SCANI ?
-// contar com os \n?
-// rever as Exp
-// pode dar erro quando se faz uma Atrib fora de FOR pq falta ;
-// e quando se faz uma atribuiçao ao mesmo tempo que uma declaraçao? -> acrescentei produção (resolve tambem problema anterior)
-// é necessario rever todos os sitios onde se deve inserir ou nao ;
 
 %}
 
@@ -58,8 +45,9 @@ static Stack s;
 %% 
 // #################### PROGRAMA ###################################
 
-Prog:       ListaDecla                                  
-            ListaFun                                    {fprintf(f,"START\n");}
+Prog:                                                   {fprintf(f,"START\n");}
+            ListaDecla                                  {fprintf(f,"JUMP init\n");}
+            ListaFun                                    {fprintf(f,"init:NOP\n");}
             ListInst                                    {fprintf(f,"STOP\n");}
             ;
 
@@ -195,8 +183,8 @@ Exp:         Exp '+' Exp                        {fprintf(f,"ADD\n");}
 
 
 FunArgs:    | FunArgs2 ;
-FunArgs2:   Exp                         {expFunNextArg(_INTS);}
-            | FunArgs2 ',' Exp          {expFunNextArg(_INTS);}
+FunArgs2:   Exp                                 {expFunNextArg(_INTS);}
+            | FunArgs2 ',' Exp                  {expFunNextArg(_INTS);}
             ;
 
 TestExpL:   '(' ExpL ')'                                        
@@ -208,9 +196,9 @@ ExpL:         Exp '=''=' Exp                       {fprintf(f,"EQUAL\n");}
             | Exp '<''=' Exp                       {fprintf(f,"INFEQ\n");}
             | Exp '<' Exp                          {fprintf(f,"INF\n");}
             | Exp '>' Exp                          {fprintf(f,"SUP\n");}
-            | '(' ExpL ')'                         {fprintf(f,"PUSHI 1\nEQUAL\nJZ endCond%d\n", get(s));}
-            '&''&' '(' ExpL ')'                    {fprintf(f,"PUSHI 1\nEQUAL\nJZ endCond%d\n", get(s));}
-            | '(' ExpL ')' '|''|' '(' ExpL ')'     {fprintf(f,"ADD\nJZ endCond%d\n", get(s));}
+            | '(' ExpL ')'                         {fprintf(f,"PUSHI 1\nEQUAL\nJZ endCond%d:NOP\n", get(s));}
+            '&''&' '(' ExpL ')'                    {fprintf(f,"PUSHI 1\nEQUAL\nJZ endCond%d:NOP\n", get(s));}
+            | '(' ExpL ')' '|''|' '(' ExpL ')'     {fprintf(f,"ADD\nJZ endCond%d:NOP\n", get(s));}
         
 %%
 

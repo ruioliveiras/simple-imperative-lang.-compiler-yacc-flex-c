@@ -39,9 +39,11 @@ struct sEntryFun{
 static EntryFun gloContext;
 static EntryFun funContext;
 static EntryFun inUseFun;
-//static map_t mVarMap;
-static map_t mFuncMap;
-//static int addressCounter;
+
+static map_t gloVars;
+static int gloVarsCount = 0
+static map_t funVars;
+static int funVarsCount = 0
 
 int initVarMap()
 {
@@ -68,7 +70,6 @@ EntryFun containsFun(char* varName)
         varEntry = NULL;
     return varEntry;    
 }
-
 
 EntryVar containsVar(EntryFun fun, char* varName)
 {
