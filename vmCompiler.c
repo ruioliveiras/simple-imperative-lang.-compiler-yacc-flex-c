@@ -221,10 +221,11 @@ Addr getAddr(char* varName)
         scope = 'G';
     } else {
         varEntry = containsVar(funContext,varName);
+        scope = 'L';    
         if(varEntry == NULL) {
             varEntry = containsVar(gloContext,varName);
+            scope = 'G';    
         }
-        scope = 'L';
     }
 
 	if(varEntry != NULL) {
