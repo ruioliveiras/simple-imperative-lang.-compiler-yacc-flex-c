@@ -25,8 +25,6 @@ typedef struct sFunArg
     struct sFunArg *next;
 }* FunArgL;
 
-typedef struct sEntryFun *EntryFun;
-
 struct sEntryFun{
     Type type;
     char *name;

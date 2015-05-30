@@ -117,7 +117,7 @@ Atrib:      VarAtr '=' Exp                              {Addr a = getAddr($1.var
                                                         else yyerror("Tipos incompatíveis");                                                            
                                                         }
             | VarAtr                                    {Addr a = getAddr($1.var_name); 
-                                                        fprintf(f,"PUSHI %d\n",a.addr);}
+                                                        fprintf(f,"PUSH%cP\nPUSHI %d\nPADD",(a.scope=='G')? 'G':'F',a.addr);}
              '[' Exp ']' '=' Exp                        {fprintf(f,"STOREN\n");}
             ;
 
@@ -175,8 +175,9 @@ Exp:         Exp '+' Exp                        {fprintf(f,"ADD\n");}
             | num                               {fprintf(f,"PUSHI %d\n", $1);}
             | VarAtr                            {Addr a = getAddr($1.var_name); 
                                                 fprintf(f,"PUSH%c %d\n",a.scope,a.addr); }
-            | VarAtr '[' Exp ']'                {Addr a = getAddr($1.var_name); 
-                                                fprintf(f,"PUSH%cP\nADD\nPUSHI %d\nLOADN\n",a.scope,a.addr);}
+            | VarAtr                            {Addr a = getAddr($1.var_name);
+                                                fprintf(f,"PUSH%cP\nPUSHI %d\nPADD",(a.scope=='G')? 'G':'F',a.addr);}
+            '[' Exp ']'                         {fprintf(f,"LOADN\n");}
             | var                               {expFun($1); fprintf(f,"nPUSHI 0\n");} // to the return
             '(' FunArgs')'                      {fprintf(f,"CALL %s\n",$1); fprintf(f, "POP %d\n",expFunNArgs());}
             ;
