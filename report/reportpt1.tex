@@ -112,28 +112,26 @@ O presente trabalho enquadra-se na unidade curricular de Processamento de Lingua
     <Programa exemplo (programa exemplo que mostre de forma simples todas as funcionalidades - funçoes, atribuiçoes, ciclos, expressoes logicas e aritmeticas)> 
 
 \section{Arquitetura}
-    O sistema desenvolvido é constituído por 2 principais modelos:  parser.l, compiler.y, que são respetivamente o analisador léxico e analisador sintático. 
+    O sistema desenvolvido é principalmente constituído por 2 modelos:  parser.l, compiler.y, que são respetivamente o analisador léxico e analisador sintático. 
 
-    Na Figura \ref{fig:dependencias}, podemos ver as dependências dos ficheiros entre si.
+    Na Figura \ref{fig:dependencias}, podemos observar as dependências entre os ficheiros.
 
-    O analisador sintático, utiliza o ficheiro vmCompiler.h, este modulo é o responsável pelo tratamento das variáveis e funções existentes.
+    O analisador sintático utiliza o ficheiro vmCompiler.h, sendo que este o modulo responsável pelo tratamento das variáveis e funções existentes (adicionar/consultar variáveis).
 
-    Em vmCompiler.h podem-se fazer ações tais como adicionar uma variável, e consultar as variáveis existentes.
+    O Sistema utiliza também duas estruturas de dados: uma HashMap e uma Stack. A hashmap é utilizada respetivamente para guardar as variáveis e as funções, enquanto que a stack permite o controlo das labels dos ciclos durante a compilação.
 
-    O Sistema também usou duas estruturas de dados: um HashMap e ou Stack, hashmap utilizado para guardar as variáveis e as funções. A stack para na compilação controlar as label's dos ciclos.
-
-    Na figura \ref{fig:struct}, pode-se ver as estruturas utilizadas em vmCompiler:
+    Na figura \ref{fig:struct} é possível observar as estruturas utilizadas em vmCompiler:
     \begin{itemize}
-      \item Scope - têm uma map com a informação das variáveis, onde a chave é nome da variável e o valor é um EntryVar;
+      \item Scope - possuem uma map com a informação das variáveis, onde a chave é nome da variável e o valor é um EntryVar;
       \item EntryFun - guarda a informação sobre o tipo de uma função (argumentos de entrada e tipo de retorno);
       \item EntryVar - guarda o tipo, nome o endereço relativo de uma dada variável;
     \end{itemize}
 
-    Com as estruturas anteriores em mente, as variáveis criadas em vmCompiler são as representadas na figura \ref{fig:objs}, onde pode-se ver duas variáveis do tipo Scope uma para o contexto global outra para o contexto interior a uma função.
+    Com as estruturas anteriores em mente, as variáveis criadas em vmCompiler são as representadas na figura \ref{fig:objs}, onde se podem ver duas variáveis do tipo Scope, uma para o contexto global e outra para o contexto interior a uma função.
 
-    Existe uma map de EntryFun (mFuncMap) onde a chave é o nome da função.
+    Existe um map de EntryFun (mFuncMap) onde a chave é o nome da função.
     
-    A variável DecFunAux, é um apontador temporário para um função que se esteja a declarar.
+    A variável DecFunAux consiste num apontador temporário para uma função declarada.
 
 \begin{figure}
 \centering
@@ -188,11 +186,8 @@ O presente trabalho enquadra-se na unidade curricular de Processamento de Lingua
 
 \chapter{Conclusão}
 \label{cap:intro}
-Terminado o desenvolvimento do trabalho, é importante referir que o mesmo nos permitiu aprofundar o conhecimento acerca do Gerador Léxico Flex assim como da análise léxica no geral, obrigando-nos também a utilizar ferramentas tais como HTML e Latex.\\
-Relativamente ao problema do "Museu da Pessoa", a dificuldade recaiu na definição da estrutura de suporte de dados, dado que devido à falta de claridade do enunciado foi necessário re-implementar a estrutura de forma a que esta admitisse a funcionalidade de ter um índice geral em HTML.\\
-No problema de "Processamento de Entidades Nomeadas" foi necessário chegar a um consenso acerca das tags que deveriam ser validadas e o relacionamento possível que estas teriam entre si. Após essa decisão, o desenvolvimento da estrutura que suporta esta informação tornou-se relativamente simples.\\
-O problema "Processamento de Ficheiros com Canções" foi resolvida através da implementação de uma estrutura capaz de evitar que a ordem dos dados no ficheiro não seja significativa (e então armazena em memória a informação). A presença de certos elementos em datasets mais diversos (tais como header's não esperados e anotações em músicas) deram origem a problemas, sendo que a solução consistiu em ignorar essa informação. \\
-Cada elemento do grupo realizou um exercício do enunciado proposto, apoiando-se mutuamente na existência de dificuldades. Apesar das dificuldades iniciais, encontramos-nos satisfeitos com o resultado final e estamos confiantes para o próximo trabalho.
+
+
 
 \include{anexos}
 \end{document}
