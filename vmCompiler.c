@@ -8,8 +8,10 @@
 #define ERRO_VAR_ALREADY_EXIST -1
 #define ERRO_VAR_DONT_EXIST -2
 #define ERRO_VAR_INVALID_TYPE -3
+#define ERRO_FUN_DONT_EXIST -4
+#define ERRO -5
 
-
+void yyerror(char *s);
 
 struct sEntryVar{
     Type type;
@@ -19,7 +21,7 @@ struct sEntryVar{
 
 typedef struct sFunArg
 {
-    Type arg;
+    struct sEntryVar* v; 
     struct sFunArg *next;
 }* FunArgL;
 
@@ -28,27 +30,30 @@ struct sEntryFun{
     char *name;
     FunArgL args;
     FunArgL argsEnd;
-    map_t vars;
-    int addrCount;
+    int nargs;
 };
 
+typedef struct sScope{
+    map_t vars;
+    int addrCount;
+}* Scope;
 
-static EntryFun gloContext;
-static EntryFun funContext;
-//static map_t mVarMap;
+static EntryFun inUseFun;
+static EntryFun decFunAux;
+static Scope gloContext;
+static Scope funContext;
+
 static map_t mFuncMap;
-//static int addressCounter;
+
+
+EntryVar containsVar(Scope fun, char* varName);
+
 
 int initVarMap()
 {
-    gloContext = (EntryFun) malloc(sizeof(struct sEntryFun));
+    gloContext = (Scope) malloc(sizeof(struct sScope));
     gloContext->vars = hashmap_new();
     gloContext->addrCount = 0;
-    //undifined
-    gloContext->args = NULL;
-    gloContext->argsEnd = NULL;
-    gloContext->type = _VOID;
-    gloContext->name = NULL;
 	//addressCounter = 0;
 	//mVarMap = hashmap_new();
 	mFuncMap = hashmap_new();
@@ -65,10 +70,11 @@ EntryFun containsFun(char* varName)
     return varEntry;    
 }
 
-
-EntryVar containsVar(EntryFun fun, char* varName)
+EntryVar containsVar(Scope fun, char* varName)
 {
 	EntryVar varEntry; //= (Entry) malloc(sizeof(Entry));
+    if (fun==NULL)
+        fun = gloContext;
 	
 	if(!(hashmap_get(fun->vars, varName, (any_t*) &varEntry) == MAP_OK))
 		varEntry = NULL;
@@ -83,39 +89,92 @@ int decFun(Type type,char* funName){
         newFun->type = type;
         newFun->args = NULL;
         newFun->argsEnd = NULL;
-        newFun->vars = hashmap_new();
-        newFun->addrCount = 0;
-//        printf("(delar)%s -> %d\n", newFun->name, newFun-> memAdr);
+        newFun->nargs  = 0;
+        
         hashmap_put(mFuncMap, funName, (any_t) newFun);
-        funContext = newFun;
+        decFunAux = newFun;
+
+        funContext = (Scope) malloc(sizeof(struct sScope));
+        funContext->vars = hashmap_new();
+        funContext->addrCount = 0;
         ret = OK;
     } else {
+        yyerror("Variável já declarada anteriormente");
         ret = ERRO_VAR_ALREADY_EXIST;
     }
     return ret;
 }
 
 int decAddFunArg(Type type, char* name){
-    if(funContext->argsEnd == NULL){
-        funContext->argsEnd = (FunArgL) malloc(sizeof(struct sFunArg));
-        funContext->args = funContext->argsEnd;
+    if(decFunAux->argsEnd == NULL){
+        decFunAux->argsEnd = (FunArgL) malloc(sizeof(struct sFunArg));
+        decFunAux->args = decFunAux->argsEnd;
     } else {
-        funContext->argsEnd->next = (FunArgL) malloc(sizeof(struct sFunArg));
-        funContext->argsEnd = funContext->argsEnd->next;
+        decFunAux->argsEnd->next = (FunArgL) malloc(sizeof(struct sFunArg));
+        decFunAux->argsEnd = decFunAux->argsEnd->next;
     }
-    funContext->argsEnd->arg = type;
-    return decVar(name,1);
+    decFunAux->argsEnd->next = NULL;
+    //funContext->argsEnd->v
+    int err = decVar(name,1);
+    if (err == OK){
+        (decFunAux->nargs)++;
+        hashmap_get(funContext->vars, name, (any_t*) &(decFunAux->argsEnd->v));
+    }
+    return err;
 }
 
+void decFunArgRefresh(){
+    FunArgL i = decFunAux->args;
+    while(i != NULL){
+        i->v->memAdr -= decFunAux->nargs;
+        i = i->next;
+    }
+}
 
+int decFunRetAddr(){
+    return -(decFunAux->nargs) - 1;
+}
 
 void endDecFun(){
+    decFunAux = NULL;
     funContext = NULL;
+}
+
+int expFun(char * fun){
+    inUseFun = containsFun(fun);
+    inUseFun->argsEnd = inUseFun->args;
+
+    if(inUseFun == NULL) {
+        yyerror("ERROR Funtion don't exist");
+        return ERRO_FUN_DONT_EXIST;
+    }
+}
+int expFunNextArg(Type type){
+    if(inUseFun->argsEnd == NULL){
+        yyerror("ERROR invalid number of arguments");
+        return ERRO;
+    }
+
+    if(type != inUseFun->argsEnd->v->type){
+        yyerror("ERROR types don't match");
+        return ERRO_FUN_DONT_EXIST;
+    }
+
+
+    inUseFun->argsEnd = inUseFun->argsEnd->next;
+    return OK;
+}
+int expFunNArgs(){
+    if(inUseFun->argsEnd != NULL){
+        yyerror("ERROR invalid number of arguments");
+        return ERRO;
+    }
+    return inUseFun->nargs;
 }
 
 int decVar(char* varName, int size)
 {
-    EntryFun context; 
+    Scope context; 
     int err = 0;
     if (funContext == NULL) { 
         context = gloContext;
@@ -135,7 +194,7 @@ int decVar(char* varName, int size)
 		}
 		else
 		{
-			newVar->type = _INTS;
+            newVar->type = _INTS;
 		}
 		newVar->name = strdup(varName);
 		newVar->memAdr = context->addrCount;
@@ -145,6 +204,7 @@ int decVar(char* varName, int size)
 
 		return OK;
 	}
+    yyerror("Variável já declarada anteriormente");
 	return ERRO_VAR_ALREADY_EXIST;
 }
 
@@ -154,10 +214,11 @@ Addr getAddr(char* varName)
     EntryVar varEntry;
 	int memAddr;
     char scope;
+    Type type;
 
     if (funContext == NULL) { 
         varEntry = containsVar(gloContext,varName);
-        scope = 'G';    
+        scope = 'G';
     } else {
         varEntry = containsVar(funContext,varName);
         if(varEntry == NULL) {
@@ -168,12 +229,14 @@ Addr getAddr(char* varName)
 
 	if(varEntry != NULL) {
 		memAddr = varEntry->memAdr;
+        type = varEntry->type;
 	} else {
         memAddr = ERRO_VAR_DONT_EXIST;
+        yyerror("Variável não declarada");
     }
 
 
-    Addr ret = {memAddr,scope};
+    Addr ret = {memAddr,scope,type};
 
 	return ret;
 }

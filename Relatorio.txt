@@ -49,9 +49,10 @@
 
 
 	<Arquitetura>
-
-
-
+		O sistema desenvolvido é constituído por 2 principais modelos:  parser.l, compiler.y, que são respetivamente o analisador léxico e analisador sintático. 
+		O analisador sintático, utiliza o ficheiro vmCompiler.h, este modulo é o responsável pelo tratamento das variaveis e funções existentes.
+		Em vmCompiler.h podem-se fazer acções tais como adicionar uma variavel, e consultar as variáveis existentes.
+		O Sistema também usou duas estruturas de dados: um HashMap e ou Stack, hashmap utilizado para guardar as variaveis e as funções. A stack para na compilação contrular as label's dos ciclos.
 
 
 
@@ -76,8 +77,7 @@
 
 
 		<Stack>
-
-
+			De forma a evitar confusão na atribuição de \emph{labels} relativas a \emph{ifs} e \emph{loops} é utilizado um contador de condições. À medida que é encontrada uma instrução que implique o uso de uma condição, este contador é incrementado e o seu valor é colocado numa stack. Deste modo, o valor que se encontra no topo da stack é relativo ao último \emph{ciclo/if} encontrado. Sempre que é encontrado o final de uma condição, o valor no topo da stack é removido. Através do uso de um contador e de uma stack, é muito mais simples de gerir as \emph{labels} e as operações de controlo, como \emph{JUMPs} e \emph{JZs}.
 
 
 
@@ -89,22 +89,22 @@
 
 
 
-	<Gramática Independente de Contexto>
+	<Analalisador sintatico/semantico>
 
 
 
 
 
 
-	<Parser>
-
-
-
-
+	<Analalisador lexico>
+	O Parser construido deteta todos os símbolos terminais da linguagem (palavras reservadas, sinais e variáveis).
+	É de se destacar a deteção de comentários, que são ignorados.
+	De forma a que fosse mais fácil detetar os erros de sintaxe, o parser conta as linhas que já interpretou. Desta forma o analisador sintático quando dá erro diz a linha onde o erro aconteceu.	
+	Para passar valores como o nome de variaveis ou números utiliza-se o yylval.
 
 
 	<Compilador>
-
+		A cada regra da gramática, associamos acções a serem executadas à medida que estas são reconhecidas. Assim sendo, é feita uma tradução da linguagem desenvolvida para a linguagem \emph{assembly} da VM, à medida que cada instrução ou expressão é identificada. A maioria destas acções implica uma instrução de escrita no ficheiro de output. 
 
 
 

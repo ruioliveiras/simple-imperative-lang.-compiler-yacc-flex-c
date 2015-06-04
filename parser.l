@@ -1,12 +1,6 @@
 %{
 #include "vmCompiler.h"
 #include "y.tab.h"
-#define PONTO '.'
-#define PVIRG ';'
-#define PE '('
-#define PD ')'
-#define VIRG ','
-#define IGUAL '='
 
 int ccLine = 1;
 
@@ -28,11 +22,11 @@ scani       {return(SCANI);}
 true        {return(TRUE);}
 false       {return(FALSE);}
 do          {return(DO);}
-\=	 		{return(IGUAL);}
-\.        	{return(PONTO);}
-\;        	{return(PVIRG);}
-\(        	{return(PE);}
-\)        	{return(PD);}
+\=	 		{return('=');}
+\.        	{return('.');}
+\;        	{return(';');}
+\(        	{return('(');}
+\)        	{return(')');}
 \{  	    {return('{');}
 \}      	{return('}');}
 \[ 	        {return('[');}
@@ -48,8 +42,8 @@ do          {return(DO);}
 \#          {return('#');}
 \|			{return('|');}			
 \&			{return('&');}
-[a-zA-Z]+  	{yylval.var_name=strdup(yytext); return(var);}
-[0-9]+     	{yylval.value=atoi(yytext); return(num);}
+[a-zA-Z]+  	{yylval.var_name = strdup(yytext); return(var);}
+[0-9]+     	{yylval.value = atoi(yytext); return(num);}
 [\n]        { ccLine++;}
 \/\/.*      { ; }     
 .           { ; }

@@ -40,3 +40,6 @@ t3:
 
 t4:
 	./play < test/t4
+
+t5:
+	./play < test/t5
