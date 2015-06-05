@@ -159,10 +159,11 @@ O presente trabalho enquadra-se na unidade curricular de Processamento de Lingua
 \section{Estruturas de dados}
 
 \subsection{Stack}
-      De forma a evitar confusão na atribuição de \emph{labels} relativas a \emph{ifs} e \emph{loops} é utilizado um contador de condições. À medida que é encontrada uma instrução que implique o uso de uma condição, este contador é incrementado e o seu valor é colocado numa stack. Deste modo, o valor que se encontra no topo da stack é relativo ao último \emph{ciclo/if} encontrado. Sempre que é encontrado o final de uma condição, o valor no topo da stack é removido. Através do uso de um contador e de uma stack, é muito mais simples de gerir as \emph{labels} e as operações de controlo, como \emph{JUMPs} e \emph{JZs}.
+      De forma a evitar confusão na atribuição de \emph{labels} relativas a \emph{ifs} e \emph{loops} é utilizado um contador de condições. À medida que é encontrada uma instrução que implique o uso de uma condição, este contador é incrementado e o seu valor é colocado numa stack. Deste modo, o valor que se encontra no topo da stack é relativo ao último \emph{ciclo/if} encontrado. Sempre que é encontrado o final de uma condição, o valor no topo da stack é removido. Através do uso de um contador e de uma stack, é muito mais simples gerir as \emph{labels} e as operações de controlo, como \emph{JUMPs} e \emph{JZs}.
+      A stack utilizada implementa apenas as funções necessárias para a sua inicialização, inserção, remoção e consulta. Com as operações de push/pop são inseridos/removidos valores no topo da stack, e com a operação de get, apenas é consultado o valor no topo da stack, sem que este seja removido. Esta última operação é útil para a geração de instruções 'JZ' na geração de código VM.
 
 \subsection{HashMap}
-
+	
 
 
 \chapter{Compilador}
@@ -175,10 +176,12 @@ O presente trabalho enquadra-se na unidade curricular de Processamento de Lingua
   Para passar valores como o nome de variaveis ou números utiliza-se o yylval.
 
 
-\section{Analalisador sintatico/semantico}
+\section{Analisador sintatico/semantico}
+
 
 \section{Geração de codigo máquina}
-    A cada regra da gramática, associamos acções a serem executadas à medida que estas são reconhecidas. Assim sendo, é feita uma tradução da linguagem desenvolvida para a linguagem \emph{assembly} da VM, à medida que cada instrução ou expressão é identificada. A maioria destas acções implica uma instrução de escrita no ficheiro de output. 
+    A cada regra da gramática, associamos acções a serem executadas à medida que estas são reconhecidas. Assim sendo, é feita uma tradução da linguagem desenvolvida para a linguagem \emph{assembly} da VM, à medida que cada instrução ou expressão é identificada. A maioria destas acções implica uma instrução de escrita no ficheiro de output. Todas estas acções que implicam escrita no ficheiro são triviais, existindo apenas algumas excepções como o caso do ciclo 'for'.
+	No ciclo 'for', foi necessária a utilização de instruções 'JUMP', de forma a ser possível seguir o seu fluxo de execução normal. Após a identificação e execução das acções associadas à expressão lógica presente no ciclo 'for', é gerado o salto condicional respectivo, assim como um salto para as instruções associadas ao corpo do ciclo. Além disso, é gerada uma \emph{label} que irá corresponder ao incremento do ciclo que irá ser identificado de seguida. Identificado o final do corpo do ciclo, é feito um salto para a \emph{label} correspondente ao incremento do ciclo, que para além das respetivas instruções, conterá outro 'JUMP' para o teste da expressão lógica.
 
 
 \chapter{Testes}
