@@ -159,7 +159,7 @@ For:        FOR ForHeader ConjInst                      {fprintf(f,"JUMP Cond%dA
 
 ForHeader:  '(' ForAtrib ';'                            {total++; push(s,total); fprintf(f,"Cond%d: NOP\n", get(s));}
             ExpL ';'                                    {fprintf(f,"JZ endCond%d\nJUMP Cond%dB\nCond%dA: NOP\n", get(s), get(s), get(s));}
-            ForAtrib ')'                                {fprintf(f,"JUMP Cond%d\nciclo%dB: NOP\n", get(s), get(s));}
+            ForAtrib ')'                                {fprintf(f,"JUMP Cond%d\nCond%dB: NOP\n", get(s), get(s));}
             ;
 
 ForAtrib:   Atrib | ;
