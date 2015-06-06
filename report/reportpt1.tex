@@ -65,9 +65,9 @@
 \include{capa}
 
 \begin{abstract}
-Este relatório descreve o desenvolvimento de um compilador para uma linguagem de programação simples (lps). 
+Este relatório descreve o desenvolvimento de um compilador para uma linguagem de programação imperativa simples (LPIS). 
 
-A linguagem desenvolvida foi baseada no C, e suporta:
+A linguagem desenvolvida foi baseada na linguagem de programação C, e suporta:
 \begin{itemize}
   \item Variáveis globais
   \item Ciclos: for, while, do while
@@ -102,7 +102,11 @@ O compilador foi desenvolvido com recurso ao analisador léxico Flex e ao analis
 
 \chapter{Introdução}
 \label{cap:intro}
-O presente trabalho enquadra-se na unidade curricular de Processamento de Linguangens da Licenciatura em Engenharia Informática da Universidade do Minho. O trabalho pretende aumentar a experiência em engenharia de linguagens, 
+O presente trabalho enquadra-se na unidade curricular de Processamento de Linguangens da Licenciatura em Engenharia Informática da Universidade do Minho. O trabalho pretende aumentar a experiência em engenharia de linguagens, e motivar a utilização de ferramentas de compilação de compiladores e análise léxica.
+
+Para isso era pretendido criar uma linguagem de programação imperativa simples, que será descrita à frente.
+O compilador desta linguagem foi desenvolvido desde a analise léxica até à geração de código. O Código gerado foi assembly para a maquina virtual fornecida por o docente.
+
 
 \section{Linguagem de programação imperativa simples}
     Previamente ao desenvolvimento do compilador existe a necessidade de definir uma linguagem sobre a qual este atua, com base numa qualquer linguagem imperativa. Neste sentido e por simplicidade e familiaridade, a linguagem de programação C é a selecionada. Esta linguagem foi simplificada por forma a adaptar-se aos requisitos propostos, sofrendo as seguinte modificações na sua estrutura:
@@ -176,15 +180,14 @@ O presente trabalho enquadra-se na unidade curricular de Processamento de Lingua
 
 
 \section{Analisador léxico}
-  O analisador léxico construido deteta todos os símbolos terminais da linguagem (palavras reservadas, sinais e variáveis).
-  É de se destacar a deteção de comentários, que são ignorados.
-  De forma a que fosse mais fácil detetar os erros de sintaxe, o parser conta as linhas que já interpretou. Desta forma o analisador sintático quando dá erro diz a linha onde o erro aconteceu.  
-  Para passar valores como o nome de variaveis ou números utiliza-se o yylval.
-
+  O analisador léxico encontra-se desenvolvido com o suporte da ferramenta 'ylex' e deteta todos os símbolos terminais da linguagem (palavras reservadas, sinais e variáveis). Este analisador efetua também a deteção de comentários (linhas precedidas pelos símbolos '//'), ignorando o texto neles contidos. De forma a facilitar a deteção os erros de sintaxe, o parser conta as linhas que já interpretou. Este funcionalidade permite ao analisador sintático informar a linha onde ocorrer a anomalia em caso de erro de processamento. A passagem de valores é efetuada através do yylval.  
 
 \section{Analisador sintatico/semantico}
 
-As funções são declaras depois das variáveis globais para as funções terem acesso às variáveis globais.
+As funções são declaradas depois das variáveis globais para as funções terem acesso às variáveis globais.
+
+<erro de compilaçao nao tem problema pq fazer o shift por default é que é o necessario fazer>
+
 
 \section{Geração de codigo máquina}
     A cada regra da gramática, associamos acções a serem executadas à medida que estas são reconhecidas. Assim sendo, é feita uma tradução da linguagem desenvolvida para a linguagem \emph{assembly} da VM, à medida que cada instrução ou expressão é identificada. A maioria destas acções implica uma instrução de escrita no ficheiro de output. Todas estas acções que implicam escrita no ficheiro são triviais, existindo apenas algumas excepções como o caso do ciclo 'for'.
@@ -251,6 +254,7 @@ Após a execução da função é feito o 'pop' dos argumentos e assim o valor d
 \chapter{Conclusão}
 \label{cap:intro}
 
+Finalizado o desenvolvimento do trabalho, é possível analisar o resultado final e o impacto que as diversas decisões tiveram sobre este. Um dos principais pontos positivos consiste na implementação do processamento e compilação de funções, sendo esta a funcionalidade mais trabalhosa e sobre a qual recaiu maior parte do tempo despendido. Relativamente a estas, de notar uma mudança na forma como estas foram implementadas. Anteriormente, a estrutura relativa ao armazenamento de dados de uma função possuía a capacidade de dar acesso às variáveis declaradas dentro do seu contexto, no entanto decidiu-se que esta funcionalidade era desnecessária para o funcionamento do compilador, sendo esta informação descartada. A implementação das expressões de controlo de execução possuíram também uma dificuldade acrescida, obrigando à utilização de estruturas de dados mais complexas, tais como hashmaps e stacks. Creemos ter alcançado os objetivos definidos aquando da proposta do trabalho, tendo desenvolvido um compilador capaz de processar uma LPIS, com a possibilidade de dar feedback sobre o código de input definido e criar o ficheiro com instruções em Assembly correspondentes.
 
 
 \end{document}
