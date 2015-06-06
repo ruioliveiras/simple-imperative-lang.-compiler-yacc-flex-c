@@ -10,7 +10,5 @@ int j;
     return ret;
 }
 
-i = 3;
-if (i == 3){
-    i = fun(i + 2);    
-}
+printi(fun(i + 2));    
+
