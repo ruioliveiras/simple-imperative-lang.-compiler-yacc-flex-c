@@ -149,7 +149,7 @@ While:      WHILE                                       {total++; push(s,total);
 // ####### DO WHILE ###########
 
 DoWhile:    DO                                          {total++; push(s,total); fprintf(f,"Cond%d: NOP\n", get(s));}
-            ConjInst WHILE TestExpL                     {fprintf(f,"JZ endCond%d\nJUMP Cond%d\nendCond%d: NOP\n",get(s) ,get(s) ,get(s)); pop(s);}
+            ConjInst WHILE TestExpL ';'                    {fprintf(f,"JZ endCond%d\nJUMP Cond%d\nendCond%d: NOP\n",get(s) ,get(s) ,get(s)); pop(s);}
             ;
     
 // ####### FOR ###########

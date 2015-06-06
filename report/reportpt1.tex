@@ -167,7 +167,9 @@ O presente trabalho enquadra-se na unidade curricular de Processamento de Lingua
       A stack utilizada implementa apenas as funções necessárias para a sua inicialização, inserção, remoção e consulta. Com as operações de push/pop são inseridos/removidos valores no topo da stack, e com a operação de get, apenas é consultado o valor no topo da stack, sem que este seja removido. Esta última operação é útil para a geração de instruções 'JZ' na geração de código VM.
 
 \subsection{HashMap}
-	Como foi referido anteriormente, é utilizada uma hashmap com o objetivo de guardar as variáveis e as funções. Quanto às variáveis, é necessário guardar informação como o seu endereço e tipo. Sendo assim, foi criada uma estrutura de dados auxiliar para armazenar essa informação. O nome da variável é utilizado como chave e, a partir dela, conseguimos aceder à sua informação correspondente na hashmap. 
+	Como foi referido anteriormente, é utilizada uma hashmap com o objetivo de guardar as variáveis e as funções. Quanto às variáveis, é necessário guardar e aceder a informação como o seu endereço e tipo. Sendo assim, foi criada uma estrutura de dados auxiliar para armazenar essa informação. O nome da variável é utilizado como chave e, a partir dela, conseguimos aceder à sua informação correspondente na hashmap. 
+	Relativamente às funções, é necessário guardar e aceder a informação como o seu nome, informação relativa aos seus argumentos de entrada e o tipo de dados de saída. Para esse feito, também foram necessárias estruturas de dados auxiliares como uma lista ligada capaz de armazenar informação relativa aos argumentos de entrada e uma outra que contem a informação relativa ao tipo de dados de saída, dados de entrada e nome da função. Neste caso, o nome da função funciona como chave na hashmap e o seu valor é a estrutura que contem a informação mais geral sobre a função.
+	A hashmap utilizada implementa funções necessárias para a sua inicialização, inserção, remoção e consulta, sendo que também contem outras funções que não foram utilizadas no desenvolvimento deste projeto.
 
 
 \chapter{Compilador}
@@ -213,18 +215,24 @@ Após a execução da função é feito o 'pop' dos argumentos e assim o valor d
 \chapter{Testes}
 \subsection{Teste 1}
 \subsubsection{Input}
+\lstinputlisting[language=c]{anexos/t1.in}
 \subsubsection{Output}
+\lstinputlisting[language=c]{anexos/t1.out}
 
 
 \subsection{Teste 2}
 \subsubsection{Input}
+\lstinputlisting[language=c]{anexos/t2.in}
 \subsubsection{Output}
+\lstinputlisting[language=c]{anexos/t2.out}
 
 
 
 \subsection{Teste 3}
 \subsubsection{Input}
+\lstinputlisting[language=c]{anexos/t3.in}
 \subsubsection{Output}
+\lstinputlisting[language=c]{anexos/t3.out}
 
 
 \subsection{Teste 4}
