@@ -65,9 +65,9 @@
 \include{capa}
 
 \begin{abstract}
-Este relatório descreve o desenvolvimento de um compilador para uma linguagem de programação simples (lps). 
+Este relatório descreve o desenvolvimento de um compilador para uma linguagem de programação imperativa simples (LPIS). 
 
-A linguagem desenvolvida foi baseada no C, e suporta:
+A linguagem desenvolvida foi baseada na linguagem de programação C, e suporta:
 \begin{itemize}
   \item Variáveis globais
   \item Ciclos: for, while, do while
@@ -102,7 +102,7 @@ O compilador foi desenvolvido com recurso ao analisador léxico Flex e ao analis
 
 \chapter{Introdução}
 \label{cap:intro}
-O presente trabalho enquadra-se na unidade curricular de Processamento de Linguangens da Licenciatura em Engenharia Informática da Universidade do Minho. O trabalho pretende aumentar a experiência em engenharia de linguagens, 
+O presente trabalho enquadra-se na unidade curricular de Processamento de Linguangens da Licenciatura em Engenharia Informática da Universidade do Minho. O trabalho pretende aumentar a experiência em engenharia de linguagens, e motivar a utilização de ferramentas de compilação de compiladores e análise léxica.
 
 \section{Linguagem de programação imperativa simples}
     Previamente ao desenvolvimento do compilador existe a necessidade de definir uma linguagem sobre a qual este atua, com base numa qualquer linguagem imperativa. Neste sentido e por simplicidade e familiaridade, a linguagem de programação C é a selecionada. Esta linguagem foi simplificada por forma a adaptar-se aos requisitos propostos, sofrendo as seguinte modificações na sua estrutura:
@@ -242,6 +242,7 @@ Após a execução da função é feito o 'pop' dos argumentos e assim o valor d
 \chapter{Conclusão}
 \label{cap:intro}
 
+Finalizado o desenvolvimento do trabalho, é possível analisar o resultado final e o impacto que as diversas decisões tiveram sobre este. Um dos principais pontos positivos consiste na implementação do processamento e compilação de funções, sendo esta a funcionalidade mais trabalhosa e sobre a qual recaiu maior parte do tempo despendido. Relativamente a estas, de notar uma mudança na forma como estas foram implementadas. Anteriormente, a estrutura relativa ao armazenamento de dados de uma função possuía a capacidade de dar acesso às variáveis declaradas dentro do seu contexto, no entanto decidiu-se que esta funcionalidade era desnecessária para o funcionamento do compilador, sendo esta informação descartada. A implementação das expressões de controlo de execução possuíram também uma dificuldade acrescida, obrigando à utilização de estruturas de dados mais complexas, tais como hashmaps e stacks. Creemos ter alcançado os objetivos definidos aquando da proposta do trabalho, tendo desenvolvido um compilador capaz de processar uma LPIS, com a possibilidade de dar feedback sobre o código de input definido e criar o ficheiro com instruções em Assembly correspondentes.
 
 
 \end{document}
