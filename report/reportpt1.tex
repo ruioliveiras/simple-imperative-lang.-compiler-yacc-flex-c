@@ -65,15 +65,19 @@
 \include{capa}
 
 \begin{abstract}
-Este relatório descreve a resolução de um conjunto de exercícios propostos, que consistem no desenvolvimento de programas na linguagem C com o auxílio de geradores de filtros de texto, como o Flex. Para cada problema é realizada uma breve análise sobre o trabalho efetuado, as decisões que lideraram o seu desenvolvimento e as estruturas implementadas, assim como uma explicação do seu funcionamento. 
+Este relatório descreve o desenvolvimento de um compilador para uma linguagem de programação simples (lps). 
 
-Os problemas resolvidos consistem no desenvolvimento de filtros de texto que:
+A linguagem desenvolvida foi baseada no C, e suporta:
 \begin{itemize}
-\item processa um ficheiro XML com descrições de fotografias e gera um álbum HTML.
-\item processa de um ficheiro XML anotado com tags Enamex e gera páginas HTML apresentando as "pessoas", "países", "cidades" e organizações nele identificadas. 
-\item processa vários ficheiros de texto, compostos por letras de canções, e gera documentos em LATEX para cada uma delas.
+  \item Variáveis globais
+  \item Ciclos: for, while, do while
+  \item Estruturas de Condição: If .. Else
+  \item Expressões Aritméticas e lógicas
+  \item Funções com argumentos
+  \item Declaração de variáveis locais dentro das funções
 \end{itemize}
-Para cada problema é apresentado o código em linguagem C e as expressões regulares desenvolvidas, sendo estes suportados por exemplos e devidos resultados.
+O compilador foi desenvolvido com recurso ao analisador léxico Flex e ao analisador sintático Yacc.
+
 \end{abstract}
 %----------------------------------------------------------------------
 %\newpage
@@ -163,7 +167,7 @@ O presente trabalho enquadra-se na unidade curricular de Processamento de Lingua
       A stack utilizada implementa apenas as funções necessárias para a sua inicialização, inserção, remoção e consulta. Com as operações de push/pop são inseridos/removidos valores no topo da stack, e com a operação de get, apenas é consultado o valor no topo da stack, sem que este seja removido. Esta última operação é útil para a geração de instruções 'JZ' na geração de código VM.
 
 \subsection{HashMap}
-	
+	Como foi referido anteriormente, é utilizada uma hashmap com o objetivo de guardar as variáveis e as funções. Quanto às variáveis, é necessário guardar informação como o seu endereço e tipo. Sendo assim, foi criada uma estrutura de dados auxiliar para armazenar essa informação. O nome da variável é utilizado como chave e, a partir dela, conseguimos aceder à sua informação correspondente na hashmap. 
 
 
 \chapter{Compilador}
@@ -206,6 +210,33 @@ Após a execução da função é feito o 'pop' dos argumentos e assim o valor d
 \end{figure}
 
 \chapter{Testes}
+\subsection{Teste 1}
+\subsubsection{Input}
+\subsubsection{Output}
+
+
+\subsection{Teste 2}
+\subsubsection{Input}
+\subsubsection{Output}
+
+
+
+\subsection{Teste 3}
+\subsubsection{Input}
+\subsubsection{Output}
+
+
+\subsection{Teste 4}
+\subsubsection{Input}
+\lstinputlisting[language=c]{anexos/t4.in}
+\subsubsection{Output}
+\lstinputlisting[language=c]{anexos/t4.out}
+
+\subsection{Teste 5}
+\subsubsection{Input}
+\lstinputlisting[language=c]{anexos/t5.in}
+\subsubsection{Output}
+\lstinputlisting[language=c]{anexos/t5.out}
 
 
 \chapter{Conclusão}
@@ -213,7 +244,6 @@ Após a execução da função é feito o 'pop' dos argumentos e assim o valor d
 
 
 
-\include{anexos}
 \end{document}
 
 

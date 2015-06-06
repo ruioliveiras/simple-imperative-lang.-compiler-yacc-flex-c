@@ -1,2094 +1,1975 @@
-Terminais não utilizados na gramática
+   0  $accept : Prog $end
 
-   TRUE
-   FALSE
-   END
-   nomefuncao
+   1  $$1 :
 
+   2  $$2 :
 
-Estado 134 conflictos: 1 shift/reduce
+   3  $$3 :
 
+   4  Prog : $$1 ListaDecla $$2 ListaFun $$3 ListInst
 
-Gramática
+   5  ListaFun : ListaFun Funcao
+   6           |
 
-    0 $accept: Prog $end
+   7  ListaDecla : ListaDecla Decla
+   8             |
 
-    1 $@1: %empty
+   9  ListInst : ListInst Inst
+  10           | Inst
 
-    2 $@2: %empty
+  11  $$4 :
 
-    3 $@3: %empty
+  12  $$5 :
 
-    4 Prog: $@1 ListaDecla $@2 ListaFun $@3 ListInst
+  13  Funcao : '#' Tipo var $$4 '(' ListaArg ')' $$5 '{' ListaDecla ListInst '}'
 
-    5 ListaFun: ListaFun Funcao
-    6         | %empty
+  14  ListaArg :
+  15           | ListaArg2
 
-    7 ListaDecla: ListaDecla Decla
-    8           | %empty
+  16  ListaArg2 : Tipo var
+  17            | ListaArg2 ',' Tipo var
 
-    9 ListInst: ListInst Inst
-   10         | Inst
+  18  Decla : INT var ';'
+  19        | INT var '[' num ']' ';'
 
-   11 $@4: %empty
+  20  Tipo : VOID
+  21       | INT
 
-   12 $@5: %empty
+  22  ConjInst :
+  23           | '{' ListInst '}'
 
-   13 Funcao: '#' Tipo var $@4 '(' ListaArg ')' $@5 '{' ListaDecla ListInst '}'
+  24  Inst : If
+  25       | While
+  26       | DoWhile
+  27       | For
+  28       | Atrib ';'
+  29       | Printi ';'
+  30       | Scani ';'
+  31       | RETURN Exp ';'
+  32       | ELSE
 
-   14 ListaArg: %empty
-   15         | ListaArg2
+  33  VarAtr : var
 
-   16 ListaArg2: Tipo var
-   17          | ListaArg2 ',' Tipo var
+  34  Atrib : VarAtr '=' Exp
+  35        | VarAtr '+' '+'
 
-   18 Decla: INT var ';'
-   19      | INT var '[' num ']' ';'
+  36  $$6 :
 
-   20 Tipo: VOID
-   21     | INT
+  37  Atrib : VarAtr $$6 '[' Exp ']' '=' Exp
 
-   22 ConjInst: %empty
-   23         | '{' ListInst '}'
+  38  Printi : PRINTI '(' Exp ')'
 
-   24 Inst: If
-   25     | While
-   26     | DoWhile
-   27     | For
-   28     | Atrib ';'
-   29     | Printi ';'
-   30     | Scani ';'
-   31     | RETURN Exp ';'
-   32     | ELSE
+  39  Scani : SCANI '(' VarAtr ')'
 
-   33 VarAtr: var
+  40  $$7 :
 
-   34 Atrib: VarAtr '=' Exp
-   35      | VarAtr '+' '+'
+  41  $$8 :
 
-   36 $@6: %empty
+  42  $$9 :
 
-   37 Atrib: VarAtr $@6 '[' Exp ']' '=' Exp
+  43  If : IF $$7 TestExpL $$8 ConjInst $$9 Else
 
-   38 Printi: PRINTI '(' Exp ')'
+  44  Else :
+  45       | ELSE ConjInst
 
-   39 Scani: SCANI '(' VarAtr ')'
+  46  $$10 :
 
-   40 $@7: %empty
+  47  $$11 :
 
-   41 $@8: %empty
+  48  While : WHILE $$10 TestExpL $$11 ConjInst
 
-   42 $@9: %empty
+  49  $$12 :
 
-   43 If: IF $@7 TestExpL $@8 ConjInst $@9 Else
+  50  DoWhile : DO $$12 ConjInst WHILE TestExpL
 
-   44 Else: %empty
-   45     | ELSE ConjInst
+  51  For : FOR ForHeader ConjInst
 
-   46 $@10: %empty
+  52  $$13 :
 
-   47 $@11: %empty
+  53  $$14 :
 
-   48 While: WHILE $@10 TestExpL $@11 ConjInst
+  54  ForHeader : '(' ForAtrib ';' $$13 ExpL ';' $$14 ForAtrib ')'
 
-   49 $@12: %empty
+  55  ForAtrib : Atrib
+  56           |
 
-   50 DoWhile: DO $@12 ConjInst WHILE TestExpL
+  57  Exp : Exp '+' Exp
+  58      | Exp '-' Exp
+  59      | Exp '%' Exp
+  60      | Exp '*' Exp
+  61      | Exp '/' Exp
+  62      | '(' Exp ')'
+  63      | num
+  64      | VarAtr
 
-   51 For: FOR ForHeader ConjInst
+  65  $$15 :
 
-   52 $@13: %empty
+  66  Exp : VarAtr $$15 '[' Exp ']'
 
-   53 $@14: %empty
-
-   54 ForHeader: '(' ForAtrib ';' $@13 ExpL ';' $@14 ForAtrib ')'
-
-   55 ForAtrib: Atrib
-   56         | %empty
-
-   57 Exp: Exp '+' Exp
-   58    | Exp '-' Exp
-   59    | Exp '%' Exp
-   60    | Exp '*' Exp
-   61    | Exp '/' Exp
-   62    | '(' Exp ')'
-   63    | num
-   64    | VarAtr
-
-   65 $@15: %empty
-
-   66 Exp: VarAtr $@15 '[' Exp ']'
-
-   67 $@16: %empty
-
-   68 Exp: var $@16 '(' FunArgs ')'
-
-   69 FunArgs: %empty
-   70        | FunArgs2
-
-   71 FunArgs2: Exp
-   72         | FunArgs2 ',' Exp
-
-   73 TestExpL: '(' ExpL ')'
-
-   74 ExpL: Exp '=' '=' Exp
-   75     | Exp '!' '=' Exp
-   76     | Exp '>' '=' Exp
-   77     | Exp '<' '=' Exp
-   78     | Exp '<' Exp
-   79     | Exp '>' Exp
-
-   80 $@17: %empty
-
-   81 ExpL: '(' ExpL ')' $@17 '&' '&' '(' ExpL ')'
-   82     | '(' ExpL ')' '|' '|' '(' ExpL ')'
-
-
-Terminais, com as regras aonde aparecem
-
-$end (0) 0
-'!' (33) 75
-'#' (35) 13
-'%' (37) 59
-'&' (38) 81
-'(' (40) 13 38 39 54 62 68 73 81 82
-')' (41) 13 38 39 54 62 68 73 81 82
-'*' (42) 60
-'+' (43) 35 57
-',' (44) 17 72
-'-' (45) 58
-'/' (47) 61
-';' (59) 18 19 28 29 30 31 54
-'<' (60) 77 78
-'=' (61) 34 37 74 75 76 77
-'>' (62) 76 79
-'[' (91) 19 37 66
-']' (93) 19 37 66
-'{' (123) 13 23
-'|' (124) 82
-'}' (125) 13 23
-error (256)
-INT (258) 18 19 21
-WHILE (259) 48 50
-FOR (260) 51
-IF (261) 43
-ELSE (262) 32 45
-RETURN (263) 31
-VOID (264) 20
-PRINTI (265) 38
-SCANI (266) 39
-TRUE (267)
-FALSE (268)
-DO (269) 50
-END (270)
-var (271) 13 16 17 18 19 33 68
-nomefuncao (272)
-num (273) 19 63
-
-
-Não-terminais, com as regras aonde aparecem
-
-$accept (39)
-    à esquerda: 0
-Prog (40)
-    à esquerda: 4, à direita: 0
-$@1 (41)
-    à esquerda: 1, à direita: 4
-$@2 (42)
-    à esquerda: 2, à direita: 4
-$@3 (43)
-    à esquerda: 3, à direita: 4
-ListaFun (44)
-    à esquerda: 5 6, à direita: 4 5
-ListaDecla (45)
-    à esquerda: 7 8, à direita: 4 7 13
-ListInst (46)
-    à esquerda: 9 10, à direita: 4 9 13 23
-Funcao (47)
-    à esquerda: 13, à direita: 5
-$@4 (48)
-    à esquerda: 11, à direita: 13
-$@5 (49)
-    à esquerda: 12, à direita: 13
-ListaArg (50)
-    à esquerda: 14 15, à direita: 13
-ListaArg2 (51)
-    à esquerda: 16 17, à direita: 15 17
-Decla (52)
-    à esquerda: 18 19, à direita: 7
-Tipo (53)
-    à esquerda: 20 21, à direita: 13 16 17
-ConjInst (54)
-    à esquerda: 22 23, à direita: 43 45 48 50 51
-Inst (55)
-    à esquerda: 24 25 26 27 28 29 30 31 32, à direita: 9 10
-VarAtr (56)
-    à esquerda: 33, à direita: 34 35 37 39 64 66
-Atrib (57)
-    à esquerda: 34 35 37, à direita: 28 55
-$@6 (58)
-    à esquerda: 36, à direita: 37
-Printi (59)
-    à esquerda: 38, à direita: 29
-Scani (60)
-    à esquerda: 39, à direita: 30
-If (61)
-    à esquerda: 43, à direita: 24
-$@7 (62)
-    à esquerda: 40, à direita: 43
-$@8 (63)
-    à esquerda: 41, à direita: 43
-$@9 (64)
-    à esquerda: 42, à direita: 43
-Else (65)
-    à esquerda: 44 45, à direita: 43
-While (66)
-    à esquerda: 48, à direita: 25
-$@10 (67)
-    à esquerda: 46, à direita: 48
-$@11 (68)
-    à esquerda: 47, à direita: 48
-DoWhile (69)
-    à esquerda: 50, à direita: 26
-$@12 (70)
-    à esquerda: 49, à direita: 50
-For (71)
-    à esquerda: 51, à direita: 27
-ForHeader (72)
-    à esquerda: 54, à direita: 51
-$@13 (73)
-    à esquerda: 52, à direita: 54
-$@14 (74)
-    à esquerda: 53, à direita: 54
-ForAtrib (75)
-    à esquerda: 55 56, à direita: 54
-Exp (76)
-    à esquerda: 57 58 59 60 61 62 63 64 66 68, à direita: 31 34 37
-    38 57 58 59 60 61 62 66 71 72 74 75 76 77 78 79
-$@15 (77)
-    à esquerda: 65, à direita: 66
-$@16 (78)
-    à esquerda: 67, à direita: 68
-FunArgs (79)
-    à esquerda: 69 70, à direita: 68
-FunArgs2 (80)
-    à esquerda: 71 72, à direita: 70 72
-TestExpL (81)
-    à esquerda: 73, à direita: 43 48 50
-ExpL (82)
-    à esquerda: 74 75 76 77 78 79 81 82, à direita: 54 73 81 82
-$@17 (83)
-    à esquerda: 80, à direita: 81
+  67  $$16 :
 
+  68  Exp : var $$16 '(' FunArgs ')'
 
-State 0
+  69  FunArgs :
+  70          | FunArgs2
 
-    0 $accept: . Prog $end
+  71  FunArgs2 : Exp
+  72           | FunArgs2 ',' Exp
 
-    $default  reduzir usando a regra 1 ($@1)
+  73  TestExpL : '(' ExpL ')'
 
-    Prog  ir para o estado 1
-    $@1   ir para o estado 2
+  74  ExpL : Exp '=' '=' Exp
+  75       | Exp '!' '=' Exp
+  76       | Exp '>' '=' Exp
+  77       | Exp '<' '=' Exp
+  78       | Exp '<' Exp
+  79       | Exp '>' Exp
 
+  80  $$17 :
 
-State 1
+  81  ExpL : '(' ExpL ')' $$17 '&' '&' '(' ExpL ')'
+  82       | '(' ExpL ')' '|' '|' '(' ExpL ')'
+
+state 0
+	$accept : . Prog $end  (0)
+	$$1 : .  (1)
 
-    0 $accept: Prog . $end
+	.  reduce 1
 
-    $end  fazer shift, e ir para o estado 3
+	Prog  goto 1
+	$$1  goto 2
 
 
-State 2
+state 1
+	$accept : Prog . $end  (0)
 
-    4 Prog: $@1 . ListaDecla $@2 ListaFun $@3 ListInst
+	$end  accept
 
-    $default  reduzir usando a regra 8 (ListaDecla)
 
-    ListaDecla  ir para o estado 4
+state 2
+	Prog : $$1 . ListaDecla $$2 ListaFun $$3 ListInst  (4)
+	ListaDecla : .  (8)
 
+	.  reduce 8
 
-State 3
+	ListaDecla  goto 3
 
-    0 $accept: Prog $end .
 
-    $default  aceite
+state 3
+	Prog : $$1 ListaDecla . $$2 ListaFun $$3 ListInst  (4)
+	ListaDecla : ListaDecla . Decla  (7)
+	$$2 : .  (2)
 
+	INT  shift 4
+	WHILE  reduce 2
+	FOR  reduce 2
+	IF  reduce 2
+	ELSE  reduce 2
+	RETURN  reduce 2
+	PRINTI  reduce 2
+	SCANI  reduce 2
+	DO  reduce 2
+	var  reduce 2
+	'#'  reduce 2
 
-State 4
+	$$2  goto 5
+	Decla  goto 6
 
-    4 Prog: $@1 ListaDecla . $@2 ListaFun $@3 ListInst
-    7 ListaDecla: ListaDecla . Decla
 
-    INT  fazer shift, e ir para o estado 5
+state 4
+	Decla : INT . var ';'  (18)
+	Decla : INT . var '[' num ']' ';'  (19)
 
-    $default  reduzir usando a regra 2 ($@2)
+	var  shift 7
+	.  error
 
-    $@2    ir para o estado 6
-    Decla  ir para o estado 7
 
+state 5
+	Prog : $$1 ListaDecla $$2 . ListaFun $$3 ListInst  (4)
+	ListaFun : .  (6)
 
-State 5
+	.  reduce 6
 
-   18 Decla: INT . var ';'
-   19      | INT . var '[' num ']' ';'
+	ListaFun  goto 8
 
-    var  fazer shift, e ir para o estado 8
 
+state 6
+	ListaDecla : ListaDecla Decla .  (7)
 
-State 6
+	.  reduce 7
 
-    4 Prog: $@1 ListaDecla $@2 . ListaFun $@3 ListInst
 
-    $default  reduzir usando a regra 6 (ListaFun)
+state 7
+	Decla : INT var . ';'  (18)
+	Decla : INT var . '[' num ']' ';'  (19)
 
-    ListaFun  ir para o estado 9
+	';'  shift 9
+	'['  shift 10
+	.  error
 
 
-State 7
+state 8
+	Prog : $$1 ListaDecla $$2 ListaFun . $$3 ListInst  (4)
+	ListaFun : ListaFun . Funcao  (5)
+	$$3 : .  (3)
 
-    7 ListaDecla: ListaDecla Decla .
+	'#'  shift 11
+	WHILE  reduce 3
+	FOR  reduce 3
+	IF  reduce 3
+	ELSE  reduce 3
+	RETURN  reduce 3
+	PRINTI  reduce 3
+	SCANI  reduce 3
+	DO  reduce 3
+	var  reduce 3
 
-    $default  reduzir usando a regra 7 (ListaDecla)
+	$$3  goto 12
+	Funcao  goto 13
 
 
-State 8
+state 9
+	Decla : INT var ';' .  (18)
 
-   18 Decla: INT var . ';'
-   19      | INT var . '[' num ']' ';'
+	.  reduce 18
 
-    ';'  fazer shift, e ir para o estado 10
-    '['  fazer shift, e ir para o estado 11
 
+state 10
+	Decla : INT var '[' . num ']' ';'  (19)
 
-State 9
+	num  shift 14
+	.  error
 
-    4 Prog: $@1 ListaDecla $@2 ListaFun . $@3 ListInst
-    5 ListaFun: ListaFun . Funcao
 
-    '#'  fazer shift, e ir para o estado 12
+state 11
+	Funcao : '#' . Tipo var $$4 '(' ListaArg ')' $$5 '{' ListaDecla ListInst '}'  (13)
 
-    $default  reduzir usando a regra 3 ($@3)
+	INT  shift 15
+	VOID  shift 16
+	.  error
 
-    $@3     ir para o estado 13
-    Funcao  ir para o estado 14
+	Tipo  goto 17
 
 
-State 10
+state 12
+	Prog : $$1 ListaDecla $$2 ListaFun $$3 . ListInst  (4)
 
-   18 Decla: INT var ';' .
+	WHILE  shift 18
+	FOR  shift 19
+	IF  shift 20
+	ELSE  shift 21
+	RETURN  shift 22
+	PRINTI  shift 23
+	SCANI  shift 24
+	DO  shift 25
+	var  shift 26
+	.  error
 
-    $default  reduzir usando a regra 18 (Decla)
+	VarAtr  goto 27
+	Atrib  goto 28
+	ListInst  goto 29
+	Inst  goto 30
+	If  goto 31
+	While  goto 32
+	DoWhile  goto 33
+	For  goto 34
+	Printi  goto 35
+	Scani  goto 36
 
 
-State 11
+state 13
+	ListaFun : ListaFun Funcao .  (5)
 
-   19 Decla: INT var '[' . num ']' ';'
+	.  reduce 5
 
-    num  fazer shift, e ir para o estado 15
 
+state 14
+	Decla : INT var '[' num . ']' ';'  (19)
 
-State 12
+	']'  shift 37
+	.  error
 
-   13 Funcao: '#' . Tipo var $@4 '(' ListaArg ')' $@5 '{' ListaDecla ListInst '}'
 
-    INT   fazer shift, e ir para o estado 16
-    VOID  fazer shift, e ir para o estado 17
+state 15
+	Tipo : INT .  (21)
 
-    Tipo  ir para o estado 18
+	.  reduce 21
 
 
-State 13
+state 16
+	Tipo : VOID .  (20)
 
-    4 Prog: $@1 ListaDecla $@2 ListaFun $@3 . ListInst
+	.  reduce 20
 
-    WHILE   fazer shift, e ir para o estado 19
-    FOR     fazer shift, e ir para o estado 20
-    IF      fazer shift, e ir para o estado 21
-    ELSE    fazer shift, e ir para o estado 22
-    RETURN  fazer shift, e ir para o estado 23
-    PRINTI  fazer shift, e ir para o estado 24
-    SCANI   fazer shift, e ir para o estado 25
-    DO      fazer shift, e ir para o estado 26
-    var     fazer shift, e ir para o estado 27
 
-    ListInst  ir para o estado 28
-    Inst      ir para o estado 29
-    VarAtr    ir para o estado 30
-    Atrib     ir para o estado 31
-    Printi    ir para o estado 32
-    Scani     ir para o estado 33
-    If        ir para o estado 34
-    While     ir para o estado 35
-    DoWhile   ir para o estado 36
-    For       ir para o estado 37
+state 17
+	Funcao : '#' Tipo . var $$4 '(' ListaArg ')' $$5 '{' ListaDecla ListInst '}'  (13)
 
+	var  shift 38
+	.  error
 
-State 14
 
-    5 ListaFun: ListaFun Funcao .
+state 18
+	While : WHILE . $$10 TestExpL $$11 ConjInst  (48)
+	$$10 : .  (46)
 
-    $default  reduzir usando a regra 5 (ListaFun)
+	.  reduce 46
 
+	$$10  goto 39
 
-State 15
 
-   19 Decla: INT var '[' num . ']' ';'
+state 19
+	For : FOR . ForHeader ConjInst  (51)
 
-    ']'  fazer shift, e ir para o estado 38
+	'('  shift 40
+	.  error
 
+	ForHeader  goto 41
 
-State 16
 
-   21 Tipo: INT .
+state 20
+	If : IF . $$7 TestExpL $$8 ConjInst $$9 Else  (43)
+	$$7 : .  (40)
 
-    $default  reduzir usando a regra 21 (Tipo)
+	.  reduce 40
 
+	$$7  goto 42
 
-State 17
 
-   20 Tipo: VOID .
+state 21
+	Inst : ELSE .  (32)
 
-    $default  reduzir usando a regra 20 (Tipo)
+	.  reduce 32
 
 
-State 18
+state 22
+	Inst : RETURN . Exp ';'  (31)
 
-   13 Funcao: '#' Tipo . var $@4 '(' ListaArg ')' $@5 '{' ListaDecla ListInst '}'
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-    var  fazer shift, e ir para o estado 39
+	VarAtr  goto 46
+	Exp  goto 47
 
 
-State 19
+state 23
+	Printi : PRINTI . '(' Exp ')'  (38)
 
-   48 While: WHILE . $@10 TestExpL $@11 ConjInst
+	'('  shift 48
+	.  error
 
-    $default  reduzir usando a regra 46 ($@10)
 
-    $@10  ir para o estado 40
+state 24
+	Scani : SCANI . '(' VarAtr ')'  (39)
 
+	'('  shift 49
+	.  error
 
-State 20
 
-   51 For: FOR . ForHeader ConjInst
+state 25
+	DoWhile : DO . $$12 ConjInst WHILE TestExpL  (50)
+	$$12 : .  (49)
 
-    '('  fazer shift, e ir para o estado 41
+	.  reduce 49
 
-    ForHeader  ir para o estado 42
+	$$12  goto 50
 
 
-State 21
+state 26
+	VarAtr : var .  (33)
 
-   43 If: IF . $@7 TestExpL $@8 ConjInst $@9 Else
+	.  reduce 33
 
-    $default  reduzir usando a regra 40 ($@7)
 
-    $@7  ir para o estado 43
+state 27
+	Atrib : VarAtr . '=' Exp  (34)
+	Atrib : VarAtr . '+' '+'  (35)
+	Atrib : VarAtr . $$6 '[' Exp ']' '=' Exp  (37)
+	$$6 : .  (36)
 
+	'+'  shift 51
+	'='  shift 52
+	'['  reduce 36
 
-State 22
+	$$6  goto 53
 
-   32 Inst: ELSE .
 
-    $default  reduzir usando a regra 32 (Inst)
+state 28
+	Inst : Atrib . ';'  (28)
 
+	';'  shift 54
+	.  error
 
-State 23
 
-   31 Inst: RETURN . Exp ';'
+state 29
+	Prog : $$1 ListaDecla $$2 ListaFun $$3 ListInst .  (4)
+	ListInst : ListInst . Inst  (9)
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
+	WHILE  shift 18
+	FOR  shift 19
+	IF  shift 20
+	ELSE  shift 21
+	RETURN  shift 22
+	PRINTI  shift 23
+	SCANI  shift 24
+	DO  shift 25
+	var  shift 26
+	$end  reduce 4
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 48
+	VarAtr  goto 27
+	Atrib  goto 28
+	Inst  goto 55
+	If  goto 31
+	While  goto 32
+	DoWhile  goto 33
+	For  goto 34
+	Printi  goto 35
+	Scani  goto 36
 
 
-State 24
+state 30
+	ListInst : Inst .  (10)
 
-   38 Printi: PRINTI . '(' Exp ')'
+	.  reduce 10
 
-    '('  fazer shift, e ir para o estado 49
 
+state 31
+	Inst : If .  (24)
 
-State 25
+	.  reduce 24
 
-   39 Scani: SCANI . '(' VarAtr ')'
 
-    '('  fazer shift, e ir para o estado 50
+state 32
+	Inst : While .  (25)
 
+	.  reduce 25
 
-State 26
 
-   50 DoWhile: DO . $@12 ConjInst WHILE TestExpL
+state 33
+	Inst : DoWhile .  (26)
 
-    $default  reduzir usando a regra 49 ($@12)
+	.  reduce 26
 
-    $@12  ir para o estado 51
 
+state 34
+	Inst : For .  (27)
 
-State 27
+	.  reduce 27
 
-   33 VarAtr: var .
 
-    $default  reduzir usando a regra 33 (VarAtr)
+state 35
+	Inst : Printi . ';'  (29)
 
+	';'  shift 56
+	.  error
 
-State 28
 
-    4 Prog: $@1 ListaDecla $@2 ListaFun $@3 ListInst .
-    9 ListInst: ListInst . Inst
+state 36
+	Inst : Scani . ';'  (30)
 
-    WHILE   fazer shift, e ir para o estado 19
-    FOR     fazer shift, e ir para o estado 20
-    IF      fazer shift, e ir para o estado 21
-    ELSE    fazer shift, e ir para o estado 22
-    RETURN  fazer shift, e ir para o estado 23
-    PRINTI  fazer shift, e ir para o estado 24
-    SCANI   fazer shift, e ir para o estado 25
-    DO      fazer shift, e ir para o estado 26
-    var     fazer shift, e ir para o estado 27
+	';'  shift 57
+	.  error
 
-    $default  reduzir usando a regra 4 (Prog)
 
-    Inst     ir para o estado 52
-    VarAtr   ir para o estado 30
-    Atrib    ir para o estado 31
-    Printi   ir para o estado 32
-    Scani    ir para o estado 33
-    If       ir para o estado 34
-    While    ir para o estado 35
-    DoWhile  ir para o estado 36
-    For      ir para o estado 37
+state 37
+	Decla : INT var '[' num ']' . ';'  (19)
 
+	';'  shift 58
+	.  error
 
-State 29
 
-   10 ListInst: Inst .
+state 38
+	Funcao : '#' Tipo var . $$4 '(' ListaArg ')' $$5 '{' ListaDecla ListInst '}'  (13)
+	$$4 : .  (11)
 
-    $default  reduzir usando a regra 10 (ListInst)
+	.  reduce 11
 
+	$$4  goto 59
 
-State 30
 
-   34 Atrib: VarAtr . '=' Exp
-   35      | VarAtr . '+' '+'
-   37      | VarAtr . $@6 '[' Exp ']' '=' Exp
+state 39
+	While : WHILE $$10 . TestExpL $$11 ConjInst  (48)
 
-    '+'  fazer shift, e ir para o estado 53
-    '='  fazer shift, e ir para o estado 54
+	'('  shift 60
+	.  error
 
-    $default  reduzir usando a regra 36 ($@6)
+	TestExpL  goto 61
 
-    $@6  ir para o estado 55
 
+state 40
+	ForHeader : '(' . ForAtrib ';' $$13 ExpL ';' $$14 ForAtrib ')'  (54)
+	ForAtrib : .  (56)
 
-State 31
+	var  shift 26
+	';'  reduce 56
 
-   28 Inst: Atrib . ';'
+	VarAtr  goto 27
+	Atrib  goto 62
+	ForAtrib  goto 63
 
-    ';'  fazer shift, e ir para o estado 56
 
+state 41
+	For : FOR ForHeader . ConjInst  (51)
+	ConjInst : .  (22)
 
-State 32
+	'{'  shift 64
+	$end  reduce 22
+	WHILE  reduce 22
+	FOR  reduce 22
+	IF  reduce 22
+	ELSE  reduce 22
+	RETURN  reduce 22
+	PRINTI  reduce 22
+	SCANI  reduce 22
+	DO  reduce 22
+	var  reduce 22
+	'}'  reduce 22
 
-   29 Inst: Printi . ';'
+	ConjInst  goto 65
 
-    ';'  fazer shift, e ir para o estado 57
 
+state 42
+	If : IF $$7 . TestExpL $$8 ConjInst $$9 Else  (43)
 
-State 33
+	'('  shift 60
+	.  error
 
-   30 Inst: Scani . ';'
+	TestExpL  goto 66
 
-    ';'  fazer shift, e ir para o estado 58
 
+state 43
+	VarAtr : var .  (33)
+	Exp : var . $$16 '(' FunArgs ')'  (68)
+	$$16 : .  (67)
 
-State 34
+	'+'  reduce 33
+	'-'  reduce 33
+	'*'  reduce 33
+	'/'  reduce 33
+	'%'  reduce 33
+	'('  reduce 67
+	')'  reduce 33
+	','  reduce 33
+	';'  reduce 33
+	'['  reduce 33
+	']'  reduce 33
+	'='  reduce 33
+	'!'  reduce 33
+	'>'  reduce 33
+	'<'  reduce 33
 
-   24 Inst: If .
+	$$16  goto 67
 
-    $default  reduzir usando a regra 24 (Inst)
 
+state 44
+	Exp : num .  (63)
 
-State 35
+	.  reduce 63
 
-   25 Inst: While .
 
-    $default  reduzir usando a regra 25 (Inst)
+state 45
+	Exp : '(' . Exp ')'  (62)
 
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-State 36
+	VarAtr  goto 46
+	Exp  goto 68
 
-   26 Inst: DoWhile .
 
-    $default  reduzir usando a regra 26 (Inst)
+state 46
+	Exp : VarAtr .  (64)
+	Exp : VarAtr . $$15 '[' Exp ']'  (66)
+	$$15 : .  (65)
 
+	'+'  reduce 64
+	'-'  reduce 64
+	'*'  reduce 64
+	'/'  reduce 64
+	'%'  reduce 64
+	')'  reduce 64
+	','  reduce 64
+	';'  reduce 64
+	'['  reduce 65
+	']'  reduce 64
+	'='  reduce 64
+	'!'  reduce 64
+	'>'  reduce 64
+	'<'  reduce 64
 
-State 37
+	$$15  goto 69
 
-   27 Inst: For .
 
-    $default  reduzir usando a regra 27 (Inst)
+state 47
+	Inst : RETURN Exp . ';'  (31)
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
 
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	';'  shift 75
+	.  error
 
-State 38
 
-   19 Decla: INT var '[' num ']' . ';'
+state 48
+	Printi : PRINTI '(' . Exp ')'  (38)
 
-    ';'  fazer shift, e ir para o estado 59
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
+	VarAtr  goto 46
+	Exp  goto 76
 
-State 39
 
-   13 Funcao: '#' Tipo var . $@4 '(' ListaArg ')' $@5 '{' ListaDecla ListInst '}'
+state 49
+	Scani : SCANI '(' . VarAtr ')'  (39)
 
-    $default  reduzir usando a regra 11 ($@4)
+	var  shift 26
+	.  error
 
-    $@4  ir para o estado 60
+	VarAtr  goto 77
 
 
-State 40
+state 50
+	DoWhile : DO $$12 . ConjInst WHILE TestExpL  (50)
+	ConjInst : .  (22)
 
-   48 While: WHILE $@10 . TestExpL $@11 ConjInst
+	'{'  shift 64
+	WHILE  reduce 22
 
-    '('  fazer shift, e ir para o estado 61
+	ConjInst  goto 78
 
-    TestExpL  ir para o estado 62
 
+state 51
+	Atrib : VarAtr '+' . '+'  (35)
 
-State 41
+	'+'  shift 79
+	.  error
 
-   54 ForHeader: '(' . ForAtrib ';' $@13 ExpL ';' $@14 ForAtrib ')'
 
-    var  fazer shift, e ir para o estado 27
+state 52
+	Atrib : VarAtr '=' . Exp  (34)
 
-    $default  reduzir usando a regra 56 (ForAtrib)
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-    VarAtr    ir para o estado 30
-    Atrib     ir para o estado 63
-    ForAtrib  ir para o estado 64
+	VarAtr  goto 46
+	Exp  goto 80
 
 
-State 42
+state 53
+	Atrib : VarAtr $$6 . '[' Exp ']' '=' Exp  (37)
 
-   51 For: FOR ForHeader . ConjInst
+	'['  shift 81
+	.  error
 
-    '{'  fazer shift, e ir para o estado 65
 
-    $default  reduzir usando a regra 22 (ConjInst)
+state 54
+	Inst : Atrib ';' .  (28)
 
-    ConjInst  ir para o estado 66
+	.  reduce 28
 
 
-State 43
+state 55
+	ListInst : ListInst Inst .  (9)
 
-   43 If: IF $@7 . TestExpL $@8 ConjInst $@9 Else
+	.  reduce 9
 
-    '('  fazer shift, e ir para o estado 61
 
-    TestExpL  ir para o estado 67
+state 56
+	Inst : Printi ';' .  (29)
 
+	.  reduce 29
 
-State 44
 
-   33 VarAtr: var .
-   68 Exp: var . $@16 '(' FunArgs ')'
+state 57
+	Inst : Scani ';' .  (30)
 
-    '('       reduzir usando a regra 67 ($@16)
-    $default  reduzir usando a regra 33 (VarAtr)
+	.  reduce 30
 
-    $@16  ir para o estado 68
 
+state 58
+	Decla : INT var '[' num ']' ';' .  (19)
 
-State 45
+	.  reduce 19
 
-   63 Exp: num .
 
-    $default  reduzir usando a regra 63 (Exp)
+state 59
+	Funcao : '#' Tipo var $$4 . '(' ListaArg ')' $$5 '{' ListaDecla ListInst '}'  (13)
 
+	'('  shift 82
+	.  error
 
-State 46
 
-   62 Exp: '(' . Exp ')'
+state 60
+	TestExpL : '(' . ExpL ')'  (73)
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
+	var  shift 43
+	num  shift 44
+	'('  shift 83
+	.  error
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 69
+	VarAtr  goto 46
+	Exp  goto 84
+	ExpL  goto 85
 
 
-State 47
+state 61
+	While : WHILE $$10 TestExpL . $$11 ConjInst  (48)
+	$$11 : .  (47)
 
-   64 Exp: VarAtr .
-   66    | VarAtr . $@15 '[' Exp ']'
+	.  reduce 47
 
-    '['       reduzir usando a regra 65 ($@15)
-    $default  reduzir usando a regra 64 (Exp)
+	$$11  goto 86
 
-    $@15  ir para o estado 70
 
+state 62
+	ForAtrib : Atrib .  (55)
 
-State 48
+	.  reduce 55
 
-   31 Inst: RETURN Exp . ';'
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
 
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-    ';'  fazer shift, e ir para o estado 76
+state 63
+	ForHeader : '(' ForAtrib . ';' $$13 ExpL ';' $$14 ForAtrib ')'  (54)
 
+	';'  shift 87
+	.  error
 
-State 49
 
-   38 Printi: PRINTI '(' . Exp ')'
+state 64
+	ConjInst : '{' . ListInst '}'  (23)
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
+	WHILE  shift 18
+	FOR  shift 19
+	IF  shift 20
+	ELSE  shift 21
+	RETURN  shift 22
+	PRINTI  shift 23
+	SCANI  shift 24
+	DO  shift 25
+	var  shift 26
+	.  error
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 77
+	VarAtr  goto 27
+	Atrib  goto 28
+	ListInst  goto 88
+	Inst  goto 30
+	If  goto 31
+	While  goto 32
+	DoWhile  goto 33
+	For  goto 34
+	Printi  goto 35
+	Scani  goto 36
 
 
-State 50
+state 65
+	For : FOR ForHeader ConjInst .  (51)
 
-   39 Scani: SCANI '(' . VarAtr ')'
+	.  reduce 51
 
-    var  fazer shift, e ir para o estado 27
 
-    VarAtr  ir para o estado 78
+state 66
+	If : IF $$7 TestExpL . $$8 ConjInst $$9 Else  (43)
+	$$8 : .  (41)
 
+	.  reduce 41
 
-State 51
+	$$8  goto 89
 
-   50 DoWhile: DO $@12 . ConjInst WHILE TestExpL
 
-    '{'  fazer shift, e ir para o estado 65
+state 67
+	Exp : var $$16 . '(' FunArgs ')'  (68)
 
-    $default  reduzir usando a regra 22 (ConjInst)
+	'('  shift 90
+	.  error
 
-    ConjInst  ir para o estado 79
 
+state 68
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	Exp : '(' Exp . ')'  (62)
 
-State 52
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  shift 91
+	.  error
 
-    9 ListInst: ListInst Inst .
 
-    $default  reduzir usando a regra 9 (ListInst)
+state 69
+	Exp : VarAtr $$15 . '[' Exp ']'  (66)
 
+	'['  shift 92
+	.  error
 
-State 53
 
-   35 Atrib: VarAtr '+' . '+'
+state 70
+	Exp : Exp '+' . Exp  (57)
 
-    '+'  fazer shift, e ir para o estado 80
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
+	VarAtr  goto 46
+	Exp  goto 93
 
-State 54
 
-   34 Atrib: VarAtr '=' . Exp
+state 71
+	Exp : Exp '-' . Exp  (58)
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 81
+	VarAtr  goto 46
+	Exp  goto 94
 
 
-State 55
+state 72
+	Exp : Exp '*' . Exp  (60)
 
-   37 Atrib: VarAtr $@6 . '[' Exp ']' '=' Exp
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-    '['  fazer shift, e ir para o estado 82
+	VarAtr  goto 46
+	Exp  goto 95
 
 
-State 56
+state 73
+	Exp : Exp '/' . Exp  (61)
 
-   28 Inst: Atrib ';' .
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-    $default  reduzir usando a regra 28 (Inst)
+	VarAtr  goto 46
+	Exp  goto 96
 
 
-State 57
+state 74
+	Exp : Exp '%' . Exp  (59)
 
-   29 Inst: Printi ';' .
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-    $default  reduzir usando a regra 29 (Inst)
+	VarAtr  goto 46
+	Exp  goto 97
 
 
-State 58
+state 75
+	Inst : RETURN Exp ';' .  (31)
 
-   30 Inst: Scani ';' .
+	.  reduce 31
 
-    $default  reduzir usando a regra 30 (Inst)
 
+state 76
+	Printi : PRINTI '(' Exp . ')'  (38)
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
 
-State 59
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  shift 98
+	.  error
 
-   19 Decla: INT var '[' num ']' ';' .
 
-    $default  reduzir usando a regra 19 (Decla)
+state 77
+	Scani : SCANI '(' VarAtr . ')'  (39)
 
+	')'  shift 99
+	.  error
 
-State 60
 
-   13 Funcao: '#' Tipo var $@4 . '(' ListaArg ')' $@5 '{' ListaDecla ListInst '}'
+state 78
+	DoWhile : DO $$12 ConjInst . WHILE TestExpL  (50)
 
-    '('  fazer shift, e ir para o estado 83
+	WHILE  shift 100
+	.  error
 
 
-State 61
+state 79
+	Atrib : VarAtr '+' '+' .  (35)
 
-   73 TestExpL: '(' . ExpL ')'
+	.  reduce 35
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 84
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 85
-    ExpL    ir para o estado 86
+state 80
+	Atrib : VarAtr '=' Exp .  (34)
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
 
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 34
+	';'  reduce 34
 
-State 62
 
-   48 While: WHILE $@10 TestExpL . $@11 ConjInst
+state 81
+	Atrib : VarAtr $$6 '[' . Exp ']' '=' Exp  (37)
 
-    $default  reduzir usando a regra 47 ($@11)
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-    $@11  ir para o estado 87
+	VarAtr  goto 46
+	Exp  goto 101
 
 
-State 63
+state 82
+	Funcao : '#' Tipo var $$4 '(' . ListaArg ')' $$5 '{' ListaDecla ListInst '}'  (13)
+	ListaArg : .  (14)
 
-   55 ForAtrib: Atrib .
+	INT  shift 15
+	VOID  shift 16
+	')'  reduce 14
 
-    $default  reduzir usando a regra 55 (ForAtrib)
+	Tipo  goto 102
+	ListaArg  goto 103
+	ListaArg2  goto 104
 
 
-State 64
+state 83
+	Exp : '(' . Exp ')'  (62)
+	ExpL : '(' . ExpL ')' $$17 '&' '&' '(' ExpL ')'  (81)
+	ExpL : '(' . ExpL ')' '|' '|' '(' ExpL ')'  (82)
 
-   54 ForHeader: '(' ForAtrib . ';' $@13 ExpL ';' $@14 ForAtrib ')'
+	var  shift 43
+	num  shift 44
+	'('  shift 83
+	.  error
 
-    ';'  fazer shift, e ir para o estado 88
+	VarAtr  goto 46
+	Exp  goto 105
+	ExpL  goto 106
 
 
-State 65
+state 84
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	ExpL : Exp . '=' '=' Exp  (74)
+	ExpL : Exp . '!' '=' Exp  (75)
+	ExpL : Exp . '>' '=' Exp  (76)
+	ExpL : Exp . '<' '=' Exp  (77)
+	ExpL : Exp . '<' Exp  (78)
+	ExpL : Exp . '>' Exp  (79)
 
-   23 ConjInst: '{' . ListInst '}'
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	'='  shift 107
+	'!'  shift 108
+	'>'  shift 109
+	'<'  shift 110
+	.  error
 
-    WHILE   fazer shift, e ir para o estado 19
-    FOR     fazer shift, e ir para o estado 20
-    IF      fazer shift, e ir para o estado 21
-    ELSE    fazer shift, e ir para o estado 22
-    RETURN  fazer shift, e ir para o estado 23
-    PRINTI  fazer shift, e ir para o estado 24
-    SCANI   fazer shift, e ir para o estado 25
-    DO      fazer shift, e ir para o estado 26
-    var     fazer shift, e ir para o estado 27
 
-    ListInst  ir para o estado 89
-    Inst      ir para o estado 29
-    VarAtr    ir para o estado 30
-    Atrib     ir para o estado 31
-    Printi    ir para o estado 32
-    Scani     ir para o estado 33
-    If        ir para o estado 34
-    While     ir para o estado 35
-    DoWhile   ir para o estado 36
-    For       ir para o estado 37
+state 85
+	TestExpL : '(' ExpL . ')'  (73)
 
+	')'  shift 111
+	.  error
 
-State 66
 
-   51 For: FOR ForHeader ConjInst .
+state 86
+	While : WHILE $$10 TestExpL $$11 . ConjInst  (48)
+	ConjInst : .  (22)
 
-    $default  reduzir usando a regra 51 (For)
+	'{'  shift 64
+	$end  reduce 22
+	WHILE  reduce 22
+	FOR  reduce 22
+	IF  reduce 22
+	ELSE  reduce 22
+	RETURN  reduce 22
+	PRINTI  reduce 22
+	SCANI  reduce 22
+	DO  reduce 22
+	var  reduce 22
+	'}'  reduce 22
 
+	ConjInst  goto 112
 
-State 67
 
-   43 If: IF $@7 TestExpL . $@8 ConjInst $@9 Else
+state 87
+	ForHeader : '(' ForAtrib ';' . $$13 ExpL ';' $$14 ForAtrib ')'  (54)
+	$$13 : .  (52)
 
-    $default  reduzir usando a regra 41 ($@8)
+	.  reduce 52
 
-    $@8  ir para o estado 90
+	$$13  goto 113
 
 
-State 68
+state 88
+	ListInst : ListInst . Inst  (9)
+	ConjInst : '{' ListInst . '}'  (23)
 
-   68 Exp: var $@16 . '(' FunArgs ')'
+	WHILE  shift 18
+	FOR  shift 19
+	IF  shift 20
+	ELSE  shift 21
+	RETURN  shift 22
+	PRINTI  shift 23
+	SCANI  shift 24
+	DO  shift 25
+	var  shift 26
+	'}'  shift 114
+	.  error
 
-    '('  fazer shift, e ir para o estado 91
+	VarAtr  goto 27
+	Atrib  goto 28
+	Inst  goto 55
+	If  goto 31
+	While  goto 32
+	DoWhile  goto 33
+	For  goto 34
+	Printi  goto 35
+	Scani  goto 36
 
 
-State 69
+state 89
+	If : IF $$7 TestExpL $$8 . ConjInst $$9 Else  (43)
+	ConjInst : .  (22)
 
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   62    | '(' Exp . ')'
+	'{'  shift 64
+	$end  reduce 22
+	WHILE  reduce 22
+	FOR  reduce 22
+	IF  reduce 22
+	ELSE  reduce 22
+	RETURN  reduce 22
+	PRINTI  reduce 22
+	SCANI  reduce 22
+	DO  reduce 22
+	var  reduce 22
+	'}'  reduce 22
 
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-    ')'  fazer shift, e ir para o estado 92
+	ConjInst  goto 115
 
 
-State 70
+state 90
+	Exp : var $$16 '(' . FunArgs ')'  (68)
+	FunArgs : .  (69)
 
-   66 Exp: VarAtr $@15 . '[' Exp ']'
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	')'  reduce 69
 
-    '['  fazer shift, e ir para o estado 93
+	VarAtr  goto 46
+	Exp  goto 116
+	FunArgs  goto 117
+	FunArgs2  goto 118
 
 
-State 71
+state 91
+	Exp : '(' Exp ')' .  (62)
 
-   57 Exp: Exp '+' . Exp
+	.  reduce 62
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 94
+state 92
+	Exp : VarAtr $$15 '[' . Exp ']'  (66)
 
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-State 72
+	VarAtr  goto 46
+	Exp  goto 119
 
-   58 Exp: Exp '-' . Exp
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
+state 93
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp '+' Exp .  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 95
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	'+'  reduce 57
+	'-'  reduce 57
+	')'  reduce 57
+	','  reduce 57
+	';'  reduce 57
+	']'  reduce 57
+	'='  reduce 57
+	'!'  reduce 57
+	'>'  reduce 57
+	'<'  reduce 57
 
 
-State 73
+state 94
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp '-' Exp .  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
 
-   60 Exp: Exp '*' . Exp
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	'+'  reduce 58
+	'-'  reduce 58
+	')'  reduce 58
+	','  reduce 58
+	';'  reduce 58
+	']'  reduce 58
+	'='  reduce 58
+	'!'  reduce 58
+	'>'  reduce 58
+	'<'  reduce 58
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 96
+state 95
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp '*' Exp .  (60)
+	Exp : Exp . '/' Exp  (61)
 
+	.  reduce 60
 
-State 74
 
-   61 Exp: Exp '/' . Exp
+state 96
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	Exp : Exp '/' Exp .  (61)
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
+	.  reduce 61
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 97
 
+state 97
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp '%' Exp .  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
 
-State 75
+	.  reduce 59
 
-   59 Exp: Exp '%' . Exp
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
+state 98
+	Printi : PRINTI '(' Exp ')' .  (38)
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 98
+	.  reduce 38
 
 
-State 76
+state 99
+	Scani : SCANI '(' VarAtr ')' .  (39)
 
-   31 Inst: RETURN Exp ';' .
+	.  reduce 39
 
-    $default  reduzir usando a regra 31 (Inst)
 
+state 100
+	DoWhile : DO $$12 ConjInst WHILE . TestExpL  (50)
 
-State 77
+	'('  shift 60
+	.  error
 
-   38 Printi: PRINTI '(' Exp . ')'
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
+	TestExpL  goto 120
 
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-    ')'  fazer shift, e ir para o estado 99
 
+state 101
+	Atrib : VarAtr $$6 '[' Exp . ']' '=' Exp  (37)
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
 
-State 78
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	']'  shift 121
+	.  error
 
-   39 Scani: SCANI '(' VarAtr . ')'
 
-    ')'  fazer shift, e ir para o estado 100
+state 102
+	ListaArg2 : Tipo . var  (16)
 
+	var  shift 122
+	.  error
 
-State 79
 
-   50 DoWhile: DO $@12 ConjInst . WHILE TestExpL
+state 103
+	Funcao : '#' Tipo var $$4 '(' ListaArg . ')' $$5 '{' ListaDecla ListInst '}'  (13)
 
-    WHILE  fazer shift, e ir para o estado 101
+	')'  shift 123
+	.  error
 
 
-State 80
+state 104
+	ListaArg : ListaArg2 .  (15)
+	ListaArg2 : ListaArg2 . ',' Tipo var  (17)
 
-   35 Atrib: VarAtr '+' '+' .
+	','  shift 124
+	')'  reduce 15
 
-    $default  reduzir usando a regra 35 (Atrib)
 
+state 105
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	Exp : '(' Exp . ')'  (62)
+	ExpL : Exp . '=' '=' Exp  (74)
+	ExpL : Exp . '!' '=' Exp  (75)
+	ExpL : Exp . '>' '=' Exp  (76)
+	ExpL : Exp . '<' '=' Exp  (77)
+	ExpL : Exp . '<' Exp  (78)
+	ExpL : Exp . '>' Exp  (79)
 
-State 81
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  shift 91
+	'='  shift 107
+	'!'  shift 108
+	'>'  shift 109
+	'<'  shift 110
+	.  error
 
-   34 Atrib: VarAtr '=' Exp .
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
 
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
+state 106
+	ExpL : '(' ExpL . ')' $$17 '&' '&' '(' ExpL ')'  (81)
+	ExpL : '(' ExpL . ')' '|' '|' '(' ExpL ')'  (82)
 
-    $default  reduzir usando a regra 34 (Atrib)
+	')'  shift 125
+	.  error
 
 
-State 82
+state 107
+	ExpL : Exp '=' . '=' Exp  (74)
 
-   37 Atrib: VarAtr $@6 '[' . Exp ']' '=' Exp
+	'='  shift 126
+	.  error
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 102
+state 108
+	ExpL : Exp '!' . '=' Exp  (75)
 
+	'='  shift 127
+	.  error
 
-State 83
 
-   13 Funcao: '#' Tipo var $@4 '(' . ListaArg ')' $@5 '{' ListaDecla ListInst '}'
+state 109
+	ExpL : Exp '>' . '=' Exp  (76)
+	ExpL : Exp '>' . Exp  (79)
 
-    INT   fazer shift, e ir para o estado 16
-    VOID  fazer shift, e ir para o estado 17
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	'='  shift 128
+	.  error
 
-    $default  reduzir usando a regra 14 (ListaArg)
+	VarAtr  goto 46
+	Exp  goto 129
 
-    ListaArg   ir para o estado 103
-    ListaArg2  ir para o estado 104
-    Tipo       ir para o estado 105
 
+state 110
+	ExpL : Exp '<' . '=' Exp  (77)
+	ExpL : Exp '<' . Exp  (78)
 
-State 84
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	'='  shift 130
+	.  error
 
-   62 Exp: '(' . Exp ')'
-   81 ExpL: '(' . ExpL ')' $@17 '&' '&' '(' ExpL ')'
-   82     | '(' . ExpL ')' '|' '|' '(' ExpL ')'
+	VarAtr  goto 46
+	Exp  goto 131
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 84
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 106
-    ExpL    ir para o estado 107
+state 111
+	TestExpL : '(' ExpL ')' .  (73)
 
+	.  reduce 73
 
-State 85
 
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   74 ExpL: Exp . '=' '=' Exp
-   75     | Exp . '!' '=' Exp
-   76     | Exp . '>' '=' Exp
-   77     | Exp . '<' '=' Exp
-   78     | Exp . '<' Exp
-   79     | Exp . '>' Exp
+state 112
+	While : WHILE $$10 TestExpL $$11 ConjInst .  (48)
 
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-    '='  fazer shift, e ir para o estado 108
-    '!'  fazer shift, e ir para o estado 109
-    '>'  fazer shift, e ir para o estado 110
-    '<'  fazer shift, e ir para o estado 111
+	.  reduce 48
 
 
-State 86
+state 113
+	ForHeader : '(' ForAtrib ';' $$13 . ExpL ';' $$14 ForAtrib ')'  (54)
 
-   73 TestExpL: '(' ExpL . ')'
+	var  shift 43
+	num  shift 44
+	'('  shift 83
+	.  error
 
-    ')'  fazer shift, e ir para o estado 112
+	VarAtr  goto 46
+	Exp  goto 84
+	ExpL  goto 132
 
 
-State 87
+state 114
+	ConjInst : '{' ListInst '}' .  (23)
 
-   48 While: WHILE $@10 TestExpL $@11 . ConjInst
+	.  reduce 23
 
-    '{'  fazer shift, e ir para o estado 65
 
-    $default  reduzir usando a regra 22 (ConjInst)
+state 115
+	If : IF $$7 TestExpL $$8 ConjInst . $$9 Else  (43)
+	$$9 : .  (42)
 
-    ConjInst  ir para o estado 113
+	.  reduce 42
 
+	$$9  goto 133
 
-State 88
 
-   54 ForHeader: '(' ForAtrib ';' . $@13 ExpL ';' $@14 ForAtrib ')'
+state 116
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	FunArgs2 : Exp .  (71)
 
-    $default  reduzir usando a regra 52 ($@13)
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 71
+	','  reduce 71
 
-    $@13  ir para o estado 114
 
+state 117
+	Exp : var $$16 '(' FunArgs . ')'  (68)
 
-State 89
+	')'  shift 134
+	.  error
 
-    9 ListInst: ListInst . Inst
-   23 ConjInst: '{' ListInst . '}'
 
-    WHILE   fazer shift, e ir para o estado 19
-    FOR     fazer shift, e ir para o estado 20
-    IF      fazer shift, e ir para o estado 21
-    ELSE    fazer shift, e ir para o estado 22
-    RETURN  fazer shift, e ir para o estado 23
-    PRINTI  fazer shift, e ir para o estado 24
-    SCANI   fazer shift, e ir para o estado 25
-    DO      fazer shift, e ir para o estado 26
-    var     fazer shift, e ir para o estado 27
-    '}'     fazer shift, e ir para o estado 115
+state 118
+	FunArgs : FunArgs2 .  (70)
+	FunArgs2 : FunArgs2 . ',' Exp  (72)
 
-    Inst     ir para o estado 52
-    VarAtr   ir para o estado 30
-    Atrib    ir para o estado 31
-    Printi   ir para o estado 32
-    Scani    ir para o estado 33
-    If       ir para o estado 34
-    While    ir para o estado 35
-    DoWhile  ir para o estado 36
-    For      ir para o estado 37
+	','  shift 135
+	')'  reduce 70
 
 
-State 90
+state 119
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	Exp : VarAtr $$15 '[' Exp . ']'  (66)
 
-   43 If: IF $@7 TestExpL $@8 . ConjInst $@9 Else
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	']'  shift 136
+	.  error
 
-    '{'  fazer shift, e ir para o estado 65
 
-    $default  reduzir usando a regra 22 (ConjInst)
+state 120
+	DoWhile : DO $$12 ConjInst WHILE TestExpL .  (50)
 
-    ConjInst  ir para o estado 116
+	.  reduce 50
 
 
-State 91
+state 121
+	Atrib : VarAtr $$6 '[' Exp ']' . '=' Exp  (37)
 
-   68 Exp: var $@16 '(' . FunArgs ')'
+	'='  shift 137
+	.  error
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
 
-    $default  reduzir usando a regra 69 (FunArgs)
+state 122
+	ListaArg2 : Tipo var .  (16)
 
-    VarAtr    ir para o estado 47
-    Exp       ir para o estado 117
-    FunArgs   ir para o estado 118
-    FunArgs2  ir para o estado 119
+	.  reduce 16
 
 
-State 92
+state 123
+	Funcao : '#' Tipo var $$4 '(' ListaArg ')' . $$5 '{' ListaDecla ListInst '}'  (13)
+	$$5 : .  (12)
 
-   62 Exp: '(' Exp ')' .
+	.  reduce 12
 
-    $default  reduzir usando a regra 62 (Exp)
+	$$5  goto 138
 
 
-State 93
+state 124
+	ListaArg2 : ListaArg2 ',' . Tipo var  (17)
 
-   66 Exp: VarAtr $@15 '[' . Exp ']'
+	INT  shift 15
+	VOID  shift 16
+	.  error
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
+	Tipo  goto 139
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 120
 
+state 125
+	ExpL : '(' ExpL ')' . $$17 '&' '&' '(' ExpL ')'  (81)
+	ExpL : '(' ExpL ')' . '|' '|' '(' ExpL ')'  (82)
+	$$17 : .  (80)
 
-State 94
+	'|'  shift 140
+	'&'  reduce 80
 
-   57 Exp: Exp . '+' Exp
-   57    | Exp '+' Exp .
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
+	$$17  goto 141
 
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
 
-    $default  reduzir usando a regra 57 (Exp)
+state 126
+	ExpL : Exp '=' '=' . Exp  (74)
 
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-State 95
+	VarAtr  goto 46
+	Exp  goto 142
 
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   58    | Exp '-' Exp .
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
 
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
+state 127
+	ExpL : Exp '!' '=' . Exp  (75)
 
-    $default  reduzir usando a regra 58 (Exp)
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
+	VarAtr  goto 46
+	Exp  goto 143
 
-State 96
 
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   60    | Exp '*' Exp .
-   61    | Exp . '/' Exp
+state 128
+	ExpL : Exp '>' '=' . Exp  (76)
 
-    $default  reduzir usando a regra 60 (Exp)
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
+	VarAtr  goto 46
+	Exp  goto 144
 
-State 97
 
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   61    | Exp '/' Exp .
+state 129
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	ExpL : Exp '>' Exp .  (79)
 
-    $default  reduzir usando a regra 61 (Exp)
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 79
+	';'  reduce 79
 
 
-State 98
+state 130
+	ExpL : Exp '<' '=' . Exp  (77)
 
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   59    | Exp '%' Exp .
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-    $default  reduzir usando a regra 59 (Exp)
+	VarAtr  goto 46
+	Exp  goto 145
 
 
-State 99
+state 131
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	ExpL : Exp '<' Exp .  (78)
 
-   38 Printi: PRINTI '(' Exp ')' .
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 78
+	';'  reduce 78
 
-    $default  reduzir usando a regra 38 (Printi)
 
+state 132
+	ForHeader : '(' ForAtrib ';' $$13 ExpL . ';' $$14 ForAtrib ')'  (54)
 
-State 100
+	';'  shift 146
+	.  error
 
-   39 Scani: SCANI '(' VarAtr ')' .
 
-    $default  reduzir usando a regra 39 (Scani)
+133: shift/reduce conflict (shift 147, reduce 44) on ELSE
+state 133
+	If : IF $$7 TestExpL $$8 ConjInst $$9 . Else  (43)
+	Else : .  (44)
 
+	ELSE  shift 147
+	$end  reduce 44
+	WHILE  reduce 44
+	FOR  reduce 44
+	IF  reduce 44
+	RETURN  reduce 44
+	PRINTI  reduce 44
+	SCANI  reduce 44
+	DO  reduce 44
+	var  reduce 44
+	'}'  reduce 44
 
-State 101
+	Else  goto 148
 
-   50 DoWhile: DO $@12 ConjInst WHILE . TestExpL
 
-    '('  fazer shift, e ir para o estado 61
+state 134
+	Exp : var $$16 '(' FunArgs ')' .  (68)
 
-    TestExpL  ir para o estado 121
+	.  reduce 68
 
 
-State 102
+state 135
+	FunArgs2 : FunArgs2 ',' . Exp  (72)
 
-   37 Atrib: VarAtr $@6 '[' Exp . ']' '=' Exp
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-    ']'  fazer shift, e ir para o estado 122
+	VarAtr  goto 46
+	Exp  goto 149
 
 
-State 103
+state 136
+	Exp : VarAtr $$15 '[' Exp ']' .  (66)
 
-   13 Funcao: '#' Tipo var $@4 '(' ListaArg . ')' $@5 '{' ListaDecla ListInst '}'
+	.  reduce 66
 
-    ')'  fazer shift, e ir para o estado 123
 
+state 137
+	Atrib : VarAtr $$6 '[' Exp ']' '=' . Exp  (37)
 
-State 104
+	var  shift 43
+	num  shift 44
+	'('  shift 45
+	.  error
 
-   15 ListaArg: ListaArg2 .
-   17 ListaArg2: ListaArg2 . ',' Tipo var
+	VarAtr  goto 46
+	Exp  goto 150
 
-    ','  fazer shift, e ir para o estado 124
 
-    $default  reduzir usando a regra 15 (ListaArg)
+state 138
+	Funcao : '#' Tipo var $$4 '(' ListaArg ')' $$5 . '{' ListaDecla ListInst '}'  (13)
 
+	'{'  shift 151
+	.  error
 
-State 105
 
-   16 ListaArg2: Tipo . var
+state 139
+	ListaArg2 : ListaArg2 ',' Tipo . var  (17)
 
-    var  fazer shift, e ir para o estado 125
+	var  shift 152
+	.  error
 
 
-State 106
+state 140
+	ExpL : '(' ExpL ')' '|' . '|' '(' ExpL ')'  (82)
 
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   62    | '(' Exp . ')'
-   74 ExpL: Exp . '=' '=' Exp
-   75     | Exp . '!' '=' Exp
-   76     | Exp . '>' '=' Exp
-   77     | Exp . '<' '=' Exp
-   78     | Exp . '<' Exp
-   79     | Exp . '>' Exp
+	'|'  shift 153
+	.  error
 
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-    ')'  fazer shift, e ir para o estado 92
-    '='  fazer shift, e ir para o estado 108
-    '!'  fazer shift, e ir para o estado 109
-    '>'  fazer shift, e ir para o estado 110
-    '<'  fazer shift, e ir para o estado 111
 
+state 141
+	ExpL : '(' ExpL ')' $$17 . '&' '&' '(' ExpL ')'  (81)
 
-State 107
+	'&'  shift 154
+	.  error
 
-   81 ExpL: '(' ExpL . ')' $@17 '&' '&' '(' ExpL ')'
-   82     | '(' ExpL . ')' '|' '|' '(' ExpL ')'
 
-    ')'  fazer shift, e ir para o estado 126
+state 142
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	ExpL : Exp '=' '=' Exp .  (74)
 
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 74
+	';'  reduce 74
 
-State 108
 
-   74 ExpL: Exp '=' . '=' Exp
+state 143
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	ExpL : Exp '!' '=' Exp .  (75)
 
-    '='  fazer shift, e ir para o estado 127
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 75
+	';'  reduce 75
 
 
-State 109
+state 144
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	ExpL : Exp '>' '=' Exp .  (76)
 
-   75 ExpL: Exp '!' . '=' Exp
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 76
+	';'  reduce 76
 
-    '='  fazer shift, e ir para o estado 128
 
+state 145
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	ExpL : Exp '<' '=' Exp .  (77)
 
-State 110
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 77
+	';'  reduce 77
 
-   76 ExpL: Exp '>' . '=' Exp
-   79     | Exp '>' . Exp
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
-    '='  fazer shift, e ir para o estado 129
+state 146
+	ForHeader : '(' ForAtrib ';' $$13 ExpL ';' . $$14 ForAtrib ')'  (54)
+	$$14 : .  (53)
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 130
+	.  reduce 53
 
+	$$14  goto 155
 
-State 111
 
-   77 ExpL: Exp '<' . '=' Exp
-   78     | Exp '<' . Exp
+state 147
+	Else : ELSE . ConjInst  (45)
+	ConjInst : .  (22)
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
-    '='  fazer shift, e ir para o estado 131
+	'{'  shift 64
+	$end  reduce 22
+	WHILE  reduce 22
+	FOR  reduce 22
+	IF  reduce 22
+	ELSE  reduce 22
+	RETURN  reduce 22
+	PRINTI  reduce 22
+	SCANI  reduce 22
+	DO  reduce 22
+	var  reduce 22
+	'}'  reduce 22
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 132
+	ConjInst  goto 156
 
 
-State 112
+state 148
+	If : IF $$7 TestExpL $$8 ConjInst $$9 Else .  (43)
 
-   73 TestExpL: '(' ExpL ')' .
+	.  reduce 43
 
-    $default  reduzir usando a regra 73 (TestExpL)
 
+state 149
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
+	FunArgs2 : FunArgs2 ',' Exp .  (72)
 
-State 113
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 72
+	','  reduce 72
 
-   48 While: WHILE $@10 TestExpL $@11 ConjInst .
 
-    $default  reduzir usando a regra 48 (While)
+state 150
+	Atrib : VarAtr $$6 '[' Exp ']' '=' Exp .  (37)
+	Exp : Exp . '+' Exp  (57)
+	Exp : Exp . '-' Exp  (58)
+	Exp : Exp . '%' Exp  (59)
+	Exp : Exp . '*' Exp  (60)
+	Exp : Exp . '/' Exp  (61)
 
+	'+'  shift 70
+	'-'  shift 71
+	'*'  shift 72
+	'/'  shift 73
+	'%'  shift 74
+	')'  reduce 37
+	';'  reduce 37
 
-State 114
 
-   54 ForHeader: '(' ForAtrib ';' $@13 . ExpL ';' $@14 ForAtrib ')'
+state 151
+	Funcao : '#' Tipo var $$4 '(' ListaArg ')' $$5 '{' . ListaDecla ListInst '}'  (13)
+	ListaDecla : .  (8)
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 84
+	.  reduce 8
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 85
-    ExpL    ir para o estado 133
+	ListaDecla  goto 157
 
 
-State 115
+state 152
+	ListaArg2 : ListaArg2 ',' Tipo var .  (17)
 
-   23 ConjInst: '{' ListInst '}' .
+	.  reduce 17
 
-    $default  reduzir usando a regra 23 (ConjInst)
 
+state 153
+	ExpL : '(' ExpL ')' '|' '|' . '(' ExpL ')'  (82)
 
-State 116
+	'('  shift 158
+	.  error
 
-   43 If: IF $@7 TestExpL $@8 ConjInst . $@9 Else
 
-    $default  reduzir usando a regra 42 ($@9)
+state 154
+	ExpL : '(' ExpL ')' $$17 '&' . '&' '(' ExpL ')'  (81)
 
-    $@9  ir para o estado 134
+	'&'  shift 159
+	.  error
 
 
-State 117
+state 155
+	ForHeader : '(' ForAtrib ';' $$13 ExpL ';' $$14 . ForAtrib ')'  (54)
+	ForAtrib : .  (56)
 
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   71 FunArgs2: Exp .
+	var  shift 26
+	')'  reduce 56
 
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
+	VarAtr  goto 27
+	Atrib  goto 62
+	ForAtrib  goto 160
 
-    $default  reduzir usando a regra 71 (FunArgs2)
 
+state 156
+	Else : ELSE ConjInst .  (45)
 
-State 118
+	.  reduce 45
 
-   68 Exp: var $@16 '(' FunArgs . ')'
 
-    ')'  fazer shift, e ir para o estado 135
+state 157
+	ListaDecla : ListaDecla . Decla  (7)
+	Funcao : '#' Tipo var $$4 '(' ListaArg ')' $$5 '{' ListaDecla . ListInst '}'  (13)
 
+	INT  shift 4
+	WHILE  shift 18
+	FOR  shift 19
+	IF  shift 20
+	ELSE  shift 21
+	RETURN  shift 22
+	PRINTI  shift 23
+	SCANI  shift 24
+	DO  shift 25
+	var  shift 26
+	.  error
 
-State 119
+	VarAtr  goto 27
+	Atrib  goto 28
+	ListInst  goto 161
+	Decla  goto 6
+	Inst  goto 30
+	If  goto 31
+	While  goto 32
+	DoWhile  goto 33
+	For  goto 34
+	Printi  goto 35
+	Scani  goto 36
 
-   70 FunArgs: FunArgs2 .
-   72 FunArgs2: FunArgs2 . ',' Exp
 
-    ','  fazer shift, e ir para o estado 136
+state 158
+	ExpL : '(' ExpL ')' '|' '|' '(' . ExpL ')'  (82)
 
-    $default  reduzir usando a regra 70 (FunArgs)
+	var  shift 43
+	num  shift 44
+	'('  shift 83
+	.  error
 
+	VarAtr  goto 46
+	Exp  goto 84
+	ExpL  goto 162
 
-State 120
 
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   66    | VarAtr $@15 '[' Exp . ']'
+state 159
+	ExpL : '(' ExpL ')' $$17 '&' '&' . '(' ExpL ')'  (81)
 
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-    ']'  fazer shift, e ir para o estado 137
+	'('  shift 163
+	.  error
 
 
-State 121
+state 160
+	ForHeader : '(' ForAtrib ';' $$13 ExpL ';' $$14 ForAtrib . ')'  (54)
 
-   50 DoWhile: DO $@12 ConjInst WHILE TestExpL .
+	')'  shift 164
+	.  error
 
-    $default  reduzir usando a regra 50 (DoWhile)
 
+state 161
+	ListInst : ListInst . Inst  (9)
+	Funcao : '#' Tipo var $$4 '(' ListaArg ')' $$5 '{' ListaDecla ListInst . '}'  (13)
 
-State 122
+	WHILE  shift 18
+	FOR  shift 19
+	IF  shift 20
+	ELSE  shift 21
+	RETURN  shift 22
+	PRINTI  shift 23
+	SCANI  shift 24
+	DO  shift 25
+	var  shift 26
+	'}'  shift 165
+	.  error
 
-   37 Atrib: VarAtr $@6 '[' Exp ']' . '=' Exp
+	VarAtr  goto 27
+	Atrib  goto 28
+	Inst  goto 55
+	If  goto 31
+	While  goto 32
+	DoWhile  goto 33
+	For  goto 34
+	Printi  goto 35
+	Scani  goto 36
 
-    '='  fazer shift, e ir para o estado 138
 
+state 162
+	ExpL : '(' ExpL ')' '|' '|' '(' ExpL . ')'  (82)
 
-State 123
+	')'  shift 166
+	.  error
 
-   13 Funcao: '#' Tipo var $@4 '(' ListaArg ')' . $@5 '{' ListaDecla ListInst '}'
 
-    $default  reduzir usando a regra 12 ($@5)
+state 163
+	ExpL : '(' ExpL ')' $$17 '&' '&' '(' . ExpL ')'  (81)
 
-    $@5  ir para o estado 139
+	var  shift 43
+	num  shift 44
+	'('  shift 83
+	.  error
 
+	VarAtr  goto 46
+	Exp  goto 84
+	ExpL  goto 167
 
-State 124
 
-   17 ListaArg2: ListaArg2 ',' . Tipo var
+state 164
+	ForHeader : '(' ForAtrib ';' $$13 ExpL ';' $$14 ForAtrib ')' .  (54)
 
-    INT   fazer shift, e ir para o estado 16
-    VOID  fazer shift, e ir para o estado 17
+	.  reduce 54
 
-    Tipo  ir para o estado 140
 
+state 165
+	Funcao : '#' Tipo var $$4 '(' ListaArg ')' $$5 '{' ListaDecla ListInst '}' .  (13)
 
-State 125
+	.  reduce 13
 
-   16 ListaArg2: Tipo var .
 
-    $default  reduzir usando a regra 16 (ListaArg2)
+state 166
+	ExpL : '(' ExpL ')' '|' '|' '(' ExpL ')' .  (82)
 
+	.  reduce 82
 
-State 126
 
-   81 ExpL: '(' ExpL ')' . $@17 '&' '&' '(' ExpL ')'
-   82     | '(' ExpL ')' . '|' '|' '(' ExpL ')'
+state 167
+	ExpL : '(' ExpL ')' $$17 '&' '&' '(' ExpL . ')'  (81)
 
-    '|'  fazer shift, e ir para o estado 141
+	')'  shift 168
+	.  error
 
-    $default  reduzir usando a regra 80 ($@17)
 
-    $@17  ir para o estado 142
+state 168
+	ExpL : '(' ExpL ')' $$17 '&' '&' '(' ExpL ')' .  (81)
 
+	.  reduce 81
 
-State 127
 
-   74 ExpL: Exp '=' '=' . Exp
+State 133 contains 1 shift/reduce conflict.
 
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
 
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 143
-
-
-State 128
-
-   75 ExpL: Exp '!' '=' . Exp
-
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
-
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 144
-
-
-State 129
-
-   76 ExpL: Exp '>' '=' . Exp
-
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
-
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 145
-
-
-State 130
-
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   79 ExpL: Exp '>' Exp .
-
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-
-    $default  reduzir usando a regra 79 (ExpL)
-
-
-State 131
-
-   77 ExpL: Exp '<' '=' . Exp
-
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
-
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 146
-
-
-State 132
-
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   78 ExpL: Exp '<' Exp .
-
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-
-    $default  reduzir usando a regra 78 (ExpL)
-
-
-State 133
-
-   54 ForHeader: '(' ForAtrib ';' $@13 ExpL . ';' $@14 ForAtrib ')'
-
-    ';'  fazer shift, e ir para o estado 147
-
-
-State 134
-
-   43 If: IF $@7 TestExpL $@8 ConjInst $@9 . Else
-
-    ELSE  fazer shift, e ir para o estado 148
-
-    ELSE      [reduzir usando a regra 44 (Else)]
-    $default  reduzir usando a regra 44 (Else)
-
-    Else  ir para o estado 149
-
-
-State 135
-
-   68 Exp: var $@16 '(' FunArgs ')' .
-
-    $default  reduzir usando a regra 68 (Exp)
-
-
-State 136
-
-   72 FunArgs2: FunArgs2 ',' . Exp
-
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
-
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 150
-
-
-State 137
-
-   66 Exp: VarAtr $@15 '[' Exp ']' .
-
-    $default  reduzir usando a regra 66 (Exp)
-
-
-State 138
-
-   37 Atrib: VarAtr $@6 '[' Exp ']' '=' . Exp
-
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 46
-
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 151
-
-
-State 139
-
-   13 Funcao: '#' Tipo var $@4 '(' ListaArg ')' $@5 . '{' ListaDecla ListInst '}'
-
-    '{'  fazer shift, e ir para o estado 152
-
-
-State 140
-
-   17 ListaArg2: ListaArg2 ',' Tipo . var
-
-    var  fazer shift, e ir para o estado 153
-
-
-State 141
-
-   82 ExpL: '(' ExpL ')' '|' . '|' '(' ExpL ')'
-
-    '|'  fazer shift, e ir para o estado 154
-
-
-State 142
-
-   81 ExpL: '(' ExpL ')' $@17 . '&' '&' '(' ExpL ')'
-
-    '&'  fazer shift, e ir para o estado 155
-
-
-State 143
-
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   74 ExpL: Exp '=' '=' Exp .
-
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-
-    $default  reduzir usando a regra 74 (ExpL)
-
-
-State 144
-
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   75 ExpL: Exp '!' '=' Exp .
-
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-
-    $default  reduzir usando a regra 75 (ExpL)
-
-
-State 145
-
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   76 ExpL: Exp '>' '=' Exp .
-
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-
-    $default  reduzir usando a regra 76 (ExpL)
-
-
-State 146
-
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   77 ExpL: Exp '<' '=' Exp .
-
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-
-    $default  reduzir usando a regra 77 (ExpL)
-
-
-State 147
-
-   54 ForHeader: '(' ForAtrib ';' $@13 ExpL ';' . $@14 ForAtrib ')'
-
-    $default  reduzir usando a regra 53 ($@14)
-
-    $@14  ir para o estado 156
-
-
-State 148
-
-   45 Else: ELSE . ConjInst
-
-    '{'  fazer shift, e ir para o estado 65
-
-    $default  reduzir usando a regra 22 (ConjInst)
-
-    ConjInst  ir para o estado 157
-
-
-State 149
-
-   43 If: IF $@7 TestExpL $@8 ConjInst $@9 Else .
-
-    $default  reduzir usando a regra 43 (If)
-
-
-State 150
-
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-   72 FunArgs2: FunArgs2 ',' Exp .
-
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-
-    $default  reduzir usando a regra 72 (FunArgs2)
-
-
-State 151
-
-   37 Atrib: VarAtr $@6 '[' Exp ']' '=' Exp .
-   57 Exp: Exp . '+' Exp
-   58    | Exp . '-' Exp
-   59    | Exp . '%' Exp
-   60    | Exp . '*' Exp
-   61    | Exp . '/' Exp
-
-    '+'  fazer shift, e ir para o estado 71
-    '-'  fazer shift, e ir para o estado 72
-    '*'  fazer shift, e ir para o estado 73
-    '/'  fazer shift, e ir para o estado 74
-    '%'  fazer shift, e ir para o estado 75
-
-    $default  reduzir usando a regra 37 (Atrib)
-
-
-State 152
-
-   13 Funcao: '#' Tipo var $@4 '(' ListaArg ')' $@5 '{' . ListaDecla ListInst '}'
-
-    $default  reduzir usando a regra 8 (ListaDecla)
-
-    ListaDecla  ir para o estado 158
-
-
-State 153
-
-   17 ListaArg2: ListaArg2 ',' Tipo var .
-
-    $default  reduzir usando a regra 17 (ListaArg2)
-
-
-State 154
-
-   82 ExpL: '(' ExpL ')' '|' '|' . '(' ExpL ')'
-
-    '('  fazer shift, e ir para o estado 159
-
-
-State 155
-
-   81 ExpL: '(' ExpL ')' $@17 '&' . '&' '(' ExpL ')'
-
-    '&'  fazer shift, e ir para o estado 160
-
-
-State 156
-
-   54 ForHeader: '(' ForAtrib ';' $@13 ExpL ';' $@14 . ForAtrib ')'
-
-    var  fazer shift, e ir para o estado 27
-
-    $default  reduzir usando a regra 56 (ForAtrib)
-
-    VarAtr    ir para o estado 30
-    Atrib     ir para o estado 63
-    ForAtrib  ir para o estado 161
-
-
-State 157
-
-   45 Else: ELSE ConjInst .
-
-    $default  reduzir usando a regra 45 (Else)
-
-
-State 158
-
-    7 ListaDecla: ListaDecla . Decla
-   13 Funcao: '#' Tipo var $@4 '(' ListaArg ')' $@5 '{' ListaDecla . ListInst '}'
-
-    INT     fazer shift, e ir para o estado 5
-    WHILE   fazer shift, e ir para o estado 19
-    FOR     fazer shift, e ir para o estado 20
-    IF      fazer shift, e ir para o estado 21
-    ELSE    fazer shift, e ir para o estado 22
-    RETURN  fazer shift, e ir para o estado 23
-    PRINTI  fazer shift, e ir para o estado 24
-    SCANI   fazer shift, e ir para o estado 25
-    DO      fazer shift, e ir para o estado 26
-    var     fazer shift, e ir para o estado 27
-
-    ListInst  ir para o estado 162
-    Decla     ir para o estado 7
-    Inst      ir para o estado 29
-    VarAtr    ir para o estado 30
-    Atrib     ir para o estado 31
-    Printi    ir para o estado 32
-    Scani     ir para o estado 33
-    If        ir para o estado 34
-    While     ir para o estado 35
-    DoWhile   ir para o estado 36
-    For       ir para o estado 37
-
-
-State 159
-
-   82 ExpL: '(' ExpL ')' '|' '|' '(' . ExpL ')'
-
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 84
-
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 85
-    ExpL    ir para o estado 163
-
-
-State 160
-
-   81 ExpL: '(' ExpL ')' $@17 '&' '&' . '(' ExpL ')'
-
-    '('  fazer shift, e ir para o estado 164
-
-
-State 161
-
-   54 ForHeader: '(' ForAtrib ';' $@13 ExpL ';' $@14 ForAtrib . ')'
-
-    ')'  fazer shift, e ir para o estado 165
-
-
-State 162
-
-    9 ListInst: ListInst . Inst
-   13 Funcao: '#' Tipo var $@4 '(' ListaArg ')' $@5 '{' ListaDecla ListInst . '}'
-
-    WHILE   fazer shift, e ir para o estado 19
-    FOR     fazer shift, e ir para o estado 20
-    IF      fazer shift, e ir para o estado 21
-    ELSE    fazer shift, e ir para o estado 22
-    RETURN  fazer shift, e ir para o estado 23
-    PRINTI  fazer shift, e ir para o estado 24
-    SCANI   fazer shift, e ir para o estado 25
-    DO      fazer shift, e ir para o estado 26
-    var     fazer shift, e ir para o estado 27
-    '}'     fazer shift, e ir para o estado 166
-
-    Inst     ir para o estado 52
-    VarAtr   ir para o estado 30
-    Atrib    ir para o estado 31
-    Printi   ir para o estado 32
-    Scani    ir para o estado 33
-    If       ir para o estado 34
-    While    ir para o estado 35
-    DoWhile  ir para o estado 36
-    For      ir para o estado 37
-
-
-State 163
-
-   82 ExpL: '(' ExpL ')' '|' '|' '(' ExpL . ')'
-
-    ')'  fazer shift, e ir para o estado 167
-
-
-State 164
-
-   81 ExpL: '(' ExpL ')' $@17 '&' '&' '(' . ExpL ')'
-
-    var  fazer shift, e ir para o estado 44
-    num  fazer shift, e ir para o estado 45
-    '('  fazer shift, e ir para o estado 84
-
-    VarAtr  ir para o estado 47
-    Exp     ir para o estado 85
-    ExpL    ir para o estado 168
-
-
-State 165
-
-   54 ForHeader: '(' ForAtrib ';' $@13 ExpL ';' $@14 ForAtrib ')' .
-
-    $default  reduzir usando a regra 54 (ForHeader)
-
-
-State 166
-
-   13 Funcao: '#' Tipo var $@4 '(' ListaArg ')' $@5 '{' ListaDecla ListInst '}' .
-
-    $default  reduzir usando a regra 13 (Funcao)
-
-
-State 167
-
-   82 ExpL: '(' ExpL ')' '|' '|' '(' ExpL ')' .
-
-    $default  reduzir usando a regra 82 (ExpL)
-
-
-State 168
-
-   81 ExpL: '(' ExpL ')' $@17 '&' '&' '(' ExpL . ')'
-
-    ')'  fazer shift, e ir para o estado 169
-
-
-State 169
-
-   81 ExpL: '(' ExpL ')' $@17 '&' '&' '(' ExpL ')' .
-
-    $default  reduzir usando a regra 81 (ExpL)
+38 terminals, 45 nonterminals
+83 grammar rules, 169 states
