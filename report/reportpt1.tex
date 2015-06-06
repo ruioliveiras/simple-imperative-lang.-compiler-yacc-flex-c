@@ -170,15 +170,14 @@ O presente trabalho enquadra-se na unidade curricular de Processamento de Lingua
 
 
 \section{Analisador léxico}
-  O analisador léxico construido deteta todos os símbolos terminais da linguagem (palavras reservadas, sinais e variáveis).
-  É de se destacar a deteção de comentários, que são ignorados.
-  De forma a que fosse mais fácil detetar os erros de sintaxe, o parser conta as linhas que já interpretou. Desta forma o analisador sintático quando dá erro diz a linha onde o erro aconteceu.  
-  Para passar valores como o nome de variaveis ou números utiliza-se o yylval.
-
+  O analisador léxico encontra-se desenvolvido com o suporte da ferramenta 'ylex' e deteta todos os símbolos terminais da linguagem (palavras reservadas, sinais e variáveis). Este analisador efetua também a deteção de comentários (linhas precedidas pelos símbolos '//'), ignorando o texto neles contidos. De forma a facilitar a deteção os erros de sintaxe, o parser conta as linhas que já interpretou. Este funcionalidade permite ao analisador sintático informar a linha onde ocorrer a anomalia em caso de erro de processamento. A passagem de valores é efetuada através do yylval.  
 
 \section{Analisador sintatico/semantico}
 
-As funções são declaras depois das variáveis globais para as funções terem acesso às variáveis globais.
+As funções são declaradas depois das variáveis globais para as funções terem acesso às variáveis globais.
+
+<erro de compilaçao nao tem problema pq fazer o shift por default é que é o necessario fazer>
+
 
 \section{Geração de codigo máquina}
     A cada regra da gramática, associamos acções a serem executadas à medida que estas são reconhecidas. Assim sendo, é feita uma tradução da linguagem desenvolvida para a linguagem \emph{assembly} da VM, à medida que cada instrução ou expressão é identificada. A maioria destas acções implica uma instrução de escrita no ficheiro de output. Todas estas acções que implicam escrita no ficheiro são triviais, existindo apenas algumas excepções como o caso do ciclo 'for'.

@@ -1,3 +1,7 @@
+- falta falar:
+	- da union
+
+
 <Resumo--> (resumir o que se fez no trabalho, os passos mais importantes, )
 
 <Introdução--> (falar do objetivo deste trabalho, da importancia das ferramentas geradoras de compiladores, de qq merda sobre isto ser um compilador com um parser LR, etc etc...)
@@ -118,6 +122,14 @@
 
 
 <Conclusão-->
+
+(falar sobre os problemas encontrados em cada componentes e em cada fase do projeto, dizer que foi uma experiencia bari - falar 	sobre construçao da gramática, a implementação das estruturas de dados e a forma como elas ajudaram no trabalho, e falar das decisoes que foram tomadas relativamente ao compilador )
+
+Terminado o desenvolvimento do compilador, é possível analisar o resultado final e as decisões que o moldaram. 
+
+- o pq da hashmap?
+- o pq da stack?
+
 
 
 
