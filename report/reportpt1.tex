@@ -25,6 +25,7 @@
 
 \usepackage{url}
 \usepackage{lastpage}
+\usepackage{lscape}
 \usepackage{verbatim}
 \usepackage{fancyvrb}
 \usepackage{listings}
@@ -198,7 +199,7 @@ O processamento é iniciado na produção Prog, correspondente ao começo do pro
 
 \item[Produções de Funções] \hfill \\
 
-A declaração de funções é precedida pelo símbolo terminal '#', de forma a facilitar a sua leitura e distinção com outras instruções. O armazenamento das funções declaradas é realizado através da utilização de uma hashmap, e permite guardar o contexto de estas, ou seja, as declarações efetuadas dentro da função são tidas como variáveis locais, e apenas acessíveis dentro da função. No final da declaração da função, o contexto é encerrado. Por simplicidade, não é possível utilizar chamadas a funções como argumento de outra função.
+A declaração de funções é precedida pelo símbolo terminal '\#', de forma a facilitar a sua leitura e distinção com outras instruções. O armazenamento das funções declaradas é realizado através da utilização de uma hashmap, e permite guardar o contexto de estas, ou seja, as declarações efetuadas dentro da função são tidas como variáveis locais, e apenas acessíveis dentro da função. No final da declaração da função, o contexto é encerrado. Por simplicidade, não é possível utilizar chamadas a funções como argumento de outra função.
 
 \item[Produções de declarações] \hfill \\
 
@@ -292,6 +293,16 @@ Após a execução da função é feito o 'pop' dos argumentos e assim o valor d
 \label{cap:intro}
 
 Finalizado o desenvolvimento do trabalho, é possível analisar o resultado final e o impacto que as diversas decisões tiveram sobre este. Um dos principais pontos positivos consiste na implementação do processamento e compilação de funções, sendo esta a funcionalidade mais trabalhosa e sobre a qual recaiu maior parte do tempo despendido. Relativamente a estas, de notar uma mudança na forma como estas foram implementadas. Anteriormente, a estrutura relativa ao armazenamento de dados de uma função possuía a capacidade de dar acesso às variáveis declaradas dentro do seu contexto, no entanto decidiu-se que esta funcionalidade era desnecessária para o funcionamento do compilador, sendo esta informação descartada. A implementação das expressões de controlo de execução possuíram também uma dificuldade acrescida, obrigando à utilização de estruturas de dados mais complexas, tais como hashmaps e stacks. Creemos ter alcançado os objetivos definidos aquando da proposta do trabalho, tendo desenvolvido um compilador capaz de processar uma LPIS, com a possibilidade de dar feedback sobre o código de input definido e criar o ficheiro com instruções em Assembly correspondentes.
+
+
+\chapter{Anexos}
+\section{parser.l}
+\lstinputlisting[language=c]{anexos/parser.l}
+\section{compiler.y}
+\lstinputlisting[language=c]{anexos/compiler.y}
+\section{vmCompiler.c}
+\lstinputlisting[language=c]{anexos/vmCompiler.c}
+
 
 \end{document}
 
