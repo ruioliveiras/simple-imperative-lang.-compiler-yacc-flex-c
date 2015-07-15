@@ -1,14 +1,13 @@
-// asd
+// asdas
 int i;
 int j;
 
-# int fun(int a) {
+# int fun(int a, int b) {
     int ret;
-    if (a > 0) {
-        ret = fun(a-1);
+    if ((a > 0) && (a < 100)) {
+        ret = fun(a-1,10);
     }
     return ret;
 }
 
-printi(fun(i + 2));    
-
+printi(fun(i + 2,10));

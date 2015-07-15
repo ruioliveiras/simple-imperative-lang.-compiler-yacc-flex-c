@@ -43,7 +43,7 @@ static Stack s;
 %start Prog
 
 %% 
-// #################### PROGRAMA ###################################
+ // #################### PROGRAMA ###################################
 
 Prog:                                                   {fprintf(f,"START\n");}
             ListaDecla                                  {fprintf(f,"JUMP init\n");}
@@ -62,7 +62,7 @@ ListaDecla: ListaDecla Decla
 ListInst:   ListInst Inst                               
             | Inst                                      
             ;
-// #################### FUNCAO #######################################
+ // #################### FUNCAO #######################################
 
 Funcao:     '#' Tipo var                        {decFun($2,$3);}
             '(' ListaArg ')'                    {decFunArgRefresh();fprintf(f,"%s:NOP\n",$3);}
@@ -95,7 +95,7 @@ Inst:       If
             | DoWhile
             | For                                       
             | Atrib ';'                                 
-            | Printi';'                                 
+            | Printi ';'                                 
             | Scani ';'                                 
             | RETURN Exp ';'                            {fprintf(f,"STOREL %d\n",decFunRetAddr());fprintf(f,"RETURN\n");}
             | ELSE                                      {yyerror("'Else' sem um 'If' anteriormente");}                              
@@ -103,7 +103,7 @@ Inst:       If
 
 VarAtr:     var                                         {Addr a = getAddr($1); $$.var_name=strdup($1); $$.size=1;}
             ;
-// ###### ATRIBUIÇAO ######
+// ###### ATRIBUIÇAO ##\####
 
 Atrib:      VarAtr '=' Exp                              {Addr a = getAddr($1.var_name);
                                                         if(a.type == _INTS)
@@ -162,7 +162,9 @@ ForHeader:  '(' ForAtrib ';'                            {total++; push(s,total);
             ForAtrib ')'                                {fprintf(f,"JUMP Cond%d\nCond%dB: NOP\n", get(s), get(s));}
             ;
 
-ForAtrib:   Atrib | ;
+ForAtrib:   Atrib 
+            |
+            ;
 
 // ############################### CALCULO DE EXPRESSOES ################################
 

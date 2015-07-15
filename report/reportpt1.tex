@@ -228,8 +228,18 @@ Nota: Na compilação do código referente ao programa yacc, é apresentado um e
 
 
 \section{Geração de código máquina}
-A cada regra da gramática, são associadas ações a serem executadas à medida que estas são reconhecidas. Assim sendo, é realizada uma tradução da linguagem desenvolvida para a linguagem \emph{assembly} da VM, à medida que cada instrução ou expressão é identificada. A maioria destas ações implica uma instrução de escrita no ficheiro de output. Todas estas acções que implicam escrita no ficheiro são triviais, existindo apenas algumas exceções como o caso do ciclo 'for'.
+A cada regra da gramática, são associadas ações a serem executadas à medida que estas são reconhecidas. Assim sendo, é realizada uma tradução da linguagem desenvolvida para a linguagem \emph{assembly} da VM, à medida que cada instrução ou expressão é identificada. A maioria destas ações implica uma instrução de escrita no ficheiro de output. Todas estas acções que implicam escrita no ficheiro são triviais, existindo apenas algumas exceções como o caso do ciclo 'for' (figura \ref{fig:for}).
 No ciclo 'for', é necessária a utilização de instruções 'JUMP', de forma a ser possível seguir o seu fluxo de execução normal. Após a identificação e execução das ações associadas à expressão lógica presente no ciclo 'for', é gerado o salto condicional respetivo, assim como um salto para as instruções associadas ao corpo do ciclo. Além disso, é gerada uma \emph{label} que irá corresponder ao incremento do ciclo que irá ser identificado de seguida. Identificado o final do corpo do ciclo, é efetuado um salto para a \emph{label} correspondente ao incremento do ciclo, que para além das respetivas instruções, conterá outro 'JUMP' para o teste da expressão lógica.
+
+\begin{figure}
+\centering
+\includegraphics[width=15cm]{imagens/ciclo_for.png}
+\caption{Código maquina gerado para ciclo 'for'}
+\label{fig:for}
+\end{figure}
+
+
+
 
 \subsection{Funções}
 

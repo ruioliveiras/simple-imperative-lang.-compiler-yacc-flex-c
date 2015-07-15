@@ -1,6 +1,23 @@
 // imprime os numeros pares ate 'limite' e imprime calcula o sumatorio em sum
 int i;
-
+int l[10];
+int k;
 for (i = 0; i < 5; i++) {
-	printi(i);
+    k = 2 * i;
+	printi(k + i);
+}
+
+do{
+    printi(k + i);    
+}while(i < 10);
+
+while(i < 10){
+    printi(k + i);    
+}
+
+if(i<10){
+    printi(k + i);        
+}else{
+    scani(k);
+    l[i] = l[k + 2];
 }
